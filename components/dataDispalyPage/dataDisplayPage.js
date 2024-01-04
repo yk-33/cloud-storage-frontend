@@ -38,7 +38,7 @@ import Tooltip from '@mui/material/Tooltip';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Empty } from 'antd';
 import { grey } from '@mui/material/colors';
-
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -121,7 +121,7 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
         e.stopPropagation()
         console.log('点击', id, type)
         if (id !== selectedId || type !== selectedFileType) {
-            setItemDetailCardKey(window.crypto.randomUUID())
+            setItemDetailCardKey(uuidv4())
         }
         switch (e.detail) {
             case 1:
