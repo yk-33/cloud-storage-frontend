@@ -1,4 +1,4 @@
-const BACK_END_URL = 'http://localhost:8080'
+import { BACK_END_URL } from "@/config/config"
 
 export async function _fetch(url, method = 'GET', params = {}, data = {} ){
     url = BACK_END_URL + url

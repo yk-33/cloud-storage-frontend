@@ -9,24 +9,24 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import IconButton from '@mui/material/IconButton';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import DataDisplayPage from '@/app/components/dataDispalyPage/dataDisplayPage';
+import DataDisplayPage from '@/components/dataDispalyPage/dataDisplayPage';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFolderSelectValue } from '@/app/store/modules/folderSelectStore';
+import { setFolderSelectValue } from '@/store/modules/folderSelectStore';
 import api from '@/api';
 import DownloadIcon from '@mui/icons-material/Download';
 import DriveFileRenameOutlineIcon from '@mui/icons-material/DriveFileRenameOutline';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { getFolderPath, getFolders, newFolderExpand } from '@/utils/folderTreeUtils';
-import FolderBrowser from '@/app/components/folderBrowser/folderBrowser';
+import FolderBrowser from '@/components/folderBrowser/folderBrowser';
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { updateFolderStructor, updateFolderStructorAndFolderSelect } from '@/utils/updateStoreFunctions';
-import { setFolderExpandValue } from '@/app/store/modules/folderExpandStore';
-import { fetchFolderStructor, setFolderStructor } from '@/app/store/modules/folderStore';
+import { setFolderExpandValue } from '@/store/modules/folderExpandStore';
+import { fetchFolderStructor, setFolderStructor } from '@/store/modules/folderStore';
 import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import { processActionResponse, processResponse } from '@/utils/processResponseUtils';
-import { setLoginStatus } from '@/app/store/modules/loginStore';
-
+import { setLoginStatus } from '@/store/modules/loginStore';
+import { v4 as uuidv4 } from 'uuid';
 
 let { reqGetFileList, reqDeleteFile, reqDeleteFolder, reqMoveFolder, reqMoveFile, reqGetFolderStructure,
     reqDownloadFile, reqDownloadFolder } = api;
@@ -244,7 +244,8 @@ export default function Home() {
             setFolderNotExist(true)
             setFileList([])
         }
-        setDataDisplayPageKey(window.crypto.randomUUID())
+        console.log(uuidv4())
+        setDataDisplayPageKey(uuidv4())
         setFolderBrowserDialogOpen(false)
         setMoveItemId(null)
         setMoveItemType(null)

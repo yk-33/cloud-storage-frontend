@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchFolderStructor, setFolderStructor} from '@/app/store/modules/folderStore';
-import { setFolderSelectValue } from '@/app/store/modules/folderSelectStore';
-import { setFolderExpandValue } from '@/app/store/modules/folderExpandStore';
+import { fetchFolderStructor, setFolderStructor} from '@/store/modules/folderStore';
+import { setFolderSelectValue } from '@/store/modules/folderSelectStore';
+import { setFolderExpandValue } from '@/store/modules/folderExpandStore';
 import { newFolderExpand } from './folderTreeUtils';
 import api from '../api/index'
 const {reqGetFolderStructure} = api

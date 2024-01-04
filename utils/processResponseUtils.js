@@ -1,5 +1,5 @@
 import { updateFolderStructor, updateFolderStructorAndFolderSelect } from "./updateStoreFunctions"
-import { setLoginStatus } from "@/app/store/modules/loginStore"
+import { setLoginStatus } from "@/store/modules/loginStore"
 
 //action: 0: do nothing; 1:updateFolderStructor;  2: updateFolderStructorAndFolderSelect;
 const processActionResponse = async (response, dispatch, handleAlertOpen, codeMap) => {

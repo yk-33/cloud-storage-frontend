@@ -8,8 +8,8 @@ import { TreeItem, useTreeItem } from '@mui/x-tree-view/TreeItem';
 import clsx from 'clsx';
 import Typography from '@mui/material/Typography';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFolderSelectValue } from '@/app/store/modules/folderSelectStore';
-import { setFolderExpandValue } from '@/app/store/modules/folderExpandStore';
+import { setFolderSelectValue } from '@/store/modules/folderSelectStore';
+import { setFolderExpandValue } from '@/store/modules/folderExpandStore';
 import { useRouter, usePathname } from 'next/navigation'
 import FolderIcon from '@mui/icons-material/Folder';
 

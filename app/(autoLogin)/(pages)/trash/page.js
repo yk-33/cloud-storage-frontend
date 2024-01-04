@@ -3,13 +3,13 @@ import React, { useEffect, useState } from "react";
 import api from '@/api';
 import RestoreIcon from '@mui/icons-material/Restore';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import DataDisplayPage from "@/app/components/dataDispalyPage/dataDisplayPage";
+import DataDisplayPage from "@/components/dataDispalyPage/dataDisplayPage";
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 import { useDispatch, useSelector } from 'react-redux';
 import { updateFolderStructor} from '@/utils/updateStoreFunctions';
 import {processActionResponse, processResponse} from "@/utils/processResponseUtils";
-
+import { v4 as uuidv4 } from 'uuid';
 
 const { reqGetDeletedFolders, reqGetDeletedFiles, reqUndoFolderDeletion, reqUndoFileDeletion,
     reqPermanentDeleteFolder, reqPermanentDeleteFile } = api
@@ -55,10 +55,10 @@ export default function TrashPage() {
                             450: {message: `恢复文件夹失败` ,action: 0},
                         })
                         if (res.code === 200) {
-                            setTrashPageKey(window.crypto.randomUUID())
+                            setTrashPageKey(uuidv4())
                         }
                         else if (res.code === 450) {
-                            setTrashPageKey(window.crypto.randomUUID())
+                            setTrashPageKey(uuidv4())
                         }
                     },
                 },
@@ -74,10 +74,10 @@ export default function TrashPage() {
                             450: {message: `删除文件夹失败` ,action: 0},
                         })
                         if (res.code === 200) {
-                            setTrashPageKey(window.crypto.randomUUID())
+                            setTrashPageKey(uuidv4())
                         }
                         else if (res.code === 450) {
-                            setTrashPageKey(window.crypto.randomUUID())
+                            setTrashPageKey(uuidv4())
                         }
                     },
                 },
@@ -97,10 +97,10 @@ export default function TrashPage() {
                             450: {message: `恢复文件失败` ,action: 0},
                         })
                         if (res.code === 200) {
-                            setTrashPageKey(window.crypto.randomUUID())
+                            setTrashPageKey(uuidv4())
                         }
                         else if (res.code === 450) {
-                            setTrashPageKey(window.crypto.randomUUID())
+                            setTrashPageKey(uuidv4())
                         }
                     },
                 },
@@ -116,10 +116,10 @@ export default function TrashPage() {
                             450: {message: `删除文件失败` ,action: 0},
                         })
                         if (res.code === 200) {
-                            setTrashPageKey(window.crypto.randomUUID())
+                            setTrashPageKey(uuidv4())
                         }
                         else if (res.code === 450) {
-                            setTrashPageKey(window.crypto.randomUUID())
+                            setTrashPageKey(uuidv4())
                         }
                     },
                 },
@@ -145,7 +145,7 @@ export default function TrashPage() {
         //     formatedFolderList.push({ fileType: 'folder', ...folder })
         // }
         setListData([...folderList, ...fileList])
-        setDataDisplayPageKey(window.crypto.randomUUID())
+        setDataDisplayPageKey(uuidv4())
     }
 
 

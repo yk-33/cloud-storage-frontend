@@ -15,7 +15,7 @@ import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import api from '@/api'
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoginStatus, setUserName } from '@/app/store/modules/loginStore';
+import { setLoginStatus, setUserName } from '@/store/modules/loginStore';
 import { useRouter } from 'next/navigation'
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';

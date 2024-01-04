@@ -1,7 +1,7 @@
 'use client'
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLoginStatus , setUserName} from '@/app/store/modules/loginStore';
+import { setLoginStatus , setUserName} from '@/store/modules/loginStore';
 import api from '@/api';
 
 const {reqJwtLogin} = api

@@ -30,7 +30,7 @@ import { emphasize, styled } from '@mui/material/styles';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import Menu from '@mui/material/Menu';
 import { useDispatch, useSelector } from 'react-redux';
-import { setFolderSelectValue } from '@/app/store/modules/folderSelectStore';
+import { setFolderSelectValue } from '@/store/modules/folderSelectStore';
 import { filesize } from "filesize";
 import ItemDetailCard from './card';
 import Icons from '../icon/icon';

@@ -1,7 +1,7 @@
 "use client"
 
 import CssBaseline from '@mui/material/CssBaseline';
-import store from "./store";
+import store from "@/store";
 import { Provider } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemeProvider, createTheme } from '@mui/material';
