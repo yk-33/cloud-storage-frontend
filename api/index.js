@@ -20,14 +20,19 @@ export default {
     reqDeleteFolder: (folderId)=>_fetch(`/delete-folder/${folderId}`, 'DELETE'),
     reqUndoFolderDeletion: (folderId)=>_fetch(`/undo-folder-deletion/${folderId}`, 'PATCH'),
     reqGetDeletedFolders: ()=>_fetch('/deleted-folders'),
+    reqRenameFolder: (folderId, newName)=>_fetch(`/rename-folder/${folderId}`, 'PATCH', {newName}),
 
     reqPermanentDeleteFile: (fileId)=>_fetch(`/files/${fileId}`, 'DELETE'),
     reqMoveFile: (fileId, newFatherFolderId)=>_fetch('/move-file', 'PATCH', {}, {fileId, newFatherFolderId}),
     reqDeleteFile: (fileId)=>_fetch(`/delete-file/${fileId}`, 'DELETE'),
     reqUndoFileDeletion: (fileId)=>_fetch(`/undo-file-deletion/${fileId}`, 'PATCH'),
-    reqGetFileList: (folderId)=>_fetch(`/files`, 'GET', {folderId}, {}),
-    reqGetDeletedFiles: ()=>_fetch('/deleted-files'),
+    reqGetFileList: (folderId, asc)=>_fetch(`/files`, 'GET', {folderId, asc}, {}),
+    reqGetDeletedFiles: (asc)=>_fetch('/deleted-files', 'GET', {asc}),
+    reqRenameFile: (fileId, newName)=>_fetch(`/rename-file/${fileId}`, 'PATCH', {newName}),
 
     reqDownloadFile: (fileId)=>fetch( `${BACK_END_URL}/files/${fileId}`, {credentials: 'include'}),
     reqDownloadFolder: (folderId)=>fetch(`${BACK_END_URL}/folders/${folderId}`, {credentials: 'include'}),
+
+    reqSearchFiles: (itemName, fileType, dateCreated, asc)=>_fetch(`/search-files`, 'POST', {}, {itemName, fileType, dateCreated, asc}),
+    reqSearchFolders: (itemName, fileType, dateCreated, asc)=>_fetch(`/search-folders`, 'POST', {}, {itemName, fileType, asc}),
 }

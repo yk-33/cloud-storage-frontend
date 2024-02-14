@@ -11,19 +11,32 @@ import FolderIcon from '@mui/icons-material/Folder';
 import Icons from '../icon/icon';
 import Tooltip from '@mui/material/Tooltip';
 import { BACK_END_URL, PICTURE_TYPE } from '@/config/config';
+import { useRouter, usePathname } from 'next/navigation';
 const { reqGetThumbnail } = api;
 
 
 
 export default function ItemDetailCard({ detailCardData }) {
     const [noPic, setNoPic] = useState(false)
+    const pathName = usePathname()
 
     let dataEmpty = false;
     let showType = 'normal'
     let fileType = detailCardData.fileType
+    console.log(detailCardData, pathName)
     if (Object.keys(detailCardData).length === 0) {
-        dataEmpty = true;
-        fileType = 'trash'
+        if(pathName === '/trash'){
+            dataEmpty = true;
+            fileType = 'trash'
+        }
+        else if(pathName === '/search'){
+            dataEmpty = true;
+            fileType = 'search'
+        }
+        else{
+            dataEmpty = true;
+            fileType = 'trash'
+        }
     }
     else if (!noPic) {
         if (PICTURE_TYPE.has(fileType)) {
@@ -67,14 +80,13 @@ export default function ItemDetailCard({ detailCardData }) {
             )
         }
         if (detailCardData.path !== null) {
+            detailCardData.path[0] = 'My Drive'
             detailList.push({
                 name: 'Path',
                 value: detailCardData.path.join(' / ') + ' /',
             })
         }
     }
-
-
 
 
     return (
@@ -86,7 +98,7 @@ export default function ItemDetailCard({ detailCardData }) {
                 <Icons type={fileType} />
                 <Tooltip title={detailCardData.name} disableInteractive>
                     <Typography variant="subtitle1" noWrap sx={{ ml: '8px' }}>
-                        {dataEmpty ? 'Trash' : detailCardData.name}
+                        {dataEmpty ? fileType : detailCardData.name}
                     </Typography>
                 </Tooltip>
             </Box>

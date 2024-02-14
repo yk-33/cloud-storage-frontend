@@ -39,6 +39,10 @@ import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Empty } from 'antd';
 import { grey } from '@mui/material/colors';
 import { v4 as uuidv4 } from 'uuid';
+import { useRouter, usePathname } from 'next/navigation';
+import { setFileTypeIndex, setDateCreatedIndex, setSearchPageKey } from '@/store/modules/searchParametersStore';
+import { searchFileType, searchDateCreated } from '@/config/config';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 
 
@@ -81,6 +85,9 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
         console.log('DataDisplayPage重新加载')
     }, [])
     const dispatch = useDispatch();
+    const { fileTypeIndex, dateCreatedIndex } = useSelector(state => state.searchParameters)
+    const pathName = usePathname()
+    const router = useRouter()
     let hasFolderPath = true
     if (folderpath === undefined) {
         hasFolderPath = false
@@ -132,9 +139,22 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
             case 2:
                 if (type === 'folder') {
                     dispatch(setFolderSelectValue(id))
+                    if (pathName === '/search'){
+                        router.push('/my-drive')
+                    }
                 }
                 break
         }
+    }
+
+    const handleDeleteIconFileType = () => {
+        dispatch(setFileTypeIndex(0))
+        dispatch(setSearchPageKey(uuidv4()))
+    }
+
+    const handleDeleteIconDateCreated = () => {
+        dispatch(setDateCreatedIndex(0))
+        dispatch(setSearchPageKey(uuidv4()))
     }
 
     let thisMenuData = menudata[selectedFileType]
@@ -176,14 +196,32 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
         });
     }
 
+    let searchArray = []
+    if (pathName === '/search') {
+        if (fileTypeIndex !== 0) {
+            searchArray.push(<Chip
+                label={searchFileType[fileTypeIndex].name}
+                key="fileType" color="secondary"
+                onDelete={handleDeleteIconFileType}
+            />)
+        }
+        if (dateCreatedIndex !== 0) {
+            searchArray.push(<Chip
+                label={searchDateCreated[dateCreatedIndex].name}
+                key="dateCreated" color="secondary"
+                onDelete={handleDeleteIconDateCreated}
+            />)
+        }
+    }
+
     return (
         <>
             <Box sx={{ display: "flex", bgcolor: "background.default", height: '100%' }}>
                 <Box sx={{
                     flexGrow: 1, padding: "8px", display: "flex", flexDirection: "column", minWidth: 0,
-                    bgcolor: 'background.paper', borderRadius: '15px', color: 'text.secondary'
+                    bgcolor: 'background.paper', borderRadius: '15px', color: 'text.secondary', userSelect: 'none'
                 }}>
-                    <Box sx={{ display: "flex", alignItems: 'center', height: "64px", mb: "8px", flexShrink: 0 }}>
+                    <Box sx={{ display: "flex", alignItems: 'center', height: "64px", mb: "8px", ml: '8px', flexShrink: 0 }}>
                         {
                             hasFolderPath ?
                                 <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
@@ -211,14 +249,25 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
                                 </Breadcrumbs> :
                                 <></>
                         }
-
+                        {
+                            pathName === '/search' &&
+                            <Typography variant='h5'>
+                                Search results
+                            </Typography>
+                        }
                     </Box>
                     {
+                        pathName === '/search' &&
+                        <Stack direction={'row'} spacing={2}>
+                            {searchArray}
+                        </Stack>
+                    }
+                    {
                         folderNotExist ?
-                            <Empty description={<span style={{color: grey[500]}}>
+                            <Empty description={<span style={{ color: grey[500] }}>
                                 Folder not exist
-                              </span>
-                              }/> :
+                            </span>
+                            } /> :
                             <Stack divider={<Divider />} sx={{ minHeight: 0, flexGrow: 1 }}>
                                 <Stack direction="row" spacing={1} sx={{
                                     height: "40px", flexShrink: 0,
@@ -230,8 +279,12 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
                                         </Typography>
                                         {
                                             headField.sort &&
-                                            <IconButton size="small">
-                                                <ArrowUpwardIcon fontSize="small" />
+                                            <IconButton size="small" onClick={()=>headField.action(!headField.state)}>
+                                                {
+                                                    headField.state ?
+                                                    <ArrowUpwardIcon fontSize="small" /> :
+                                                    <ArrowDownwardIcon fontSize="small" />
+                                                }
                                             </IconButton>
                                         }
                                     </Stack>
@@ -251,7 +304,7 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
 
                                         )
                                     }
-                                    <IconButton size="small" sx={{ width: "40px" }}>
+                                    <IconButton size="small" sx={{ width: "40px", visibility: 'hidden' }}>
                                         <MoreVertIcon fontSize="small" />
                                     </IconButton>
                                 </Stack>

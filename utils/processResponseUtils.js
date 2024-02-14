@@ -19,7 +19,7 @@ const processActionResponse = async (response, dispatch, handleAlertOpen, codeMa
         alertStatus = 'success'
     }
     
-    handleAlertOpen(codeMap.hasOwnProperty(response.code) ? codeMap[response.code].message : response.message, alertStatus)
+    handleAlertOpen(codeMap.hasOwnProperty(response.code)&&codeMap[response.code].message ? codeMap[response.code].message : response.message, alertStatus)
     
     let action = codeMap[response.code].action
     if (action === 1) {

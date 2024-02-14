@@ -27,11 +27,15 @@ import DriveFileMoveIcon from '@mui/icons-material/DriveFileMove';
 import { processActionResponse, processResponse } from '@/utils/processResponseUtils';
 import { setLoginStatus } from '@/store/modules/loginStore';
 import { v4 as uuidv4 } from 'uuid';
+import { SEARCH_TYPE, searchFileType, searchDateCreated } from '@/config/config';
+import { useRouter } from 'next/navigation';
+import { setSearchPageKey, setItemName, setFileTypeIndex, setDateCreatedIndex } from '@/store/modules/searchParametersStore';
 import CommonDialog from '@/components/commonDialog/commonDialog';
 
-
 let { reqGetFileList, reqDeleteFile, reqDeleteFolder, reqMoveFolder, reqMoveFile, reqGetFolderStructure,
-    reqDownloadFile, reqDownloadFolder, reqRenameFolder, reqRenameFile } = api;
+    reqDownloadFile, reqDownloadFolder, reqSearchFiles, reqSearchFolders, reqRenameFolder, reqRenameFile, 
+ } = api;
+
 
 
 
@@ -39,7 +43,10 @@ export default function Home() {
     const dispatch = useDispatch();
     const { folderStructor } = useSelector(state => state.folder);
     const { folderSelectValue } = useSelector(state => state.folderSelect);
+    const {itemName, fileTypeIndex, dateCreatedIndex, searchPageKey} = useSelector(state=>state.searchParameters)
+    const router = useRouter()
     const [fileList, setFileList] = useState([])
+    const [folderList, setFolderList] = useState([])
     const [folderBrowserDialogOpen, setFolderBrowserDialogOpen] = useState(false)
     const [moveItemId, setMoveItemId] = useState(null)
     const [moveItemType, setMoveItemType] = useState(null)
@@ -68,7 +75,7 @@ export default function Home() {
     }
 
     const fieldData = [
-        { name: 'Name', dataName: 'name', sort: true, state: nameAsc, action: setNameAsc },
+        { name: 'Name', dataName: 'name', sort: true, state: nameAsc, action: setNameAsc},
         { name: 'File type', dataName: 'fileType', sort: false, },
         { name: 'File size', dataName: 'fileSize', sort: false, },
         { name: 'Created time', dataName: 'createdTime', sort: false, },
@@ -87,12 +94,12 @@ export default function Home() {
                             let res = await reqDownloadFolder(id)
                             let data = await res.blob()
                             console.log(data)
-                            if (data.type === 'application/json') {
+                            if(data.type === 'application/json'){
                                 handleAlertOpen("请登录", 'error')
                                 dispatch(setLoginStatus(-1))
                                 return
                             }
-                            else if (data.type !== "") {
+                            else if(data.type !== ""){
                                 handleAlertOpen("文件夹不存在", 'error')
                                 return
                             }
@@ -141,8 +148,9 @@ export default function Home() {
                         console.log(res)
                         processActionResponse(res, dispatch, handleAlertOpen, {
                             200: { message: '删除文件夹成功', action: 1 },
-                            450: { message: '删除文件夹失败: 文件夹不存在', action: 2 },
+                            450: { message: '删除文件夹失败: 文件夹不存在', action: 1},
                         })
+                        dispatch(setSearchPageKey(uuidv4()))
                     },
                 }
             ],
@@ -152,17 +160,17 @@ export default function Home() {
                 {
                     name: 'Download',
                     icon: <DownloadIcon />,
-                    action: async (id, name, type) => {
+                    action: async(id, name, type) => {
                         console.log(`menu${id}`)
                         try {
                             let res = await reqDownloadFile(id)
                             let data = await res.blob()
-                            if (data.type === 'application/json') {
+                            if(data.type === 'application/json'){
                                 handleAlertOpen("请登录", 'error')
                                 dispatch(setLoginStatus(-1))
                                 return
                             }
-                            else if (data.type !== "") {
+                            else if(data.type !== ""){
                                 handleAlertOpen("文件不存在", 'error')
                                 return
                             }
@@ -211,8 +219,9 @@ export default function Home() {
                         console.log(res)
                         processActionResponse(res, dispatch, handleAlertOpen, {
                             200: { message: '删除文件成功', action: 1 },
-                            450: { message: '删除文件失败: 文件不存在', action: 2 },
+                            450: { message: '删除文件失败: 文件不存在', action: 1 },
                         })
+                        dispatch(setSearchPageKey(uuidv4()))
                     },
                 }
             ],
@@ -239,6 +248,7 @@ export default function Home() {
             450: { message: `移动失败: ${res.message}`, action: 2 },
         })
         setFolderBrowserDialogOpen(false)
+        router.push('/my-drive')
     }
 
     const handleConfirmRename = async()=>{
@@ -255,26 +265,18 @@ export default function Home() {
             409: { action: 1 },
         })
         setRenameDialogOpen(false)
+        dispatch(setSearchPageKey(uuidv4()))
     }
 
-    console.log(folderStructor)
-    console.log(folderSelectValue)
-    let folderPath = getFolderPath(folderStructor, folderSelectValue)
-    console.log('folderpath', folderPath)
-
-    const updateFileList = async () => {
-        console.log('nameAsc', nameAsc)
-        let res = await reqGetFileList(folderSelectValue, nameAsc)
-        processResponse(res, dispatch, handleAlertOpen)
-        if (res.data !== null) {
-            setFileList(res.data.fileList)
-            setFolderNotExist(false)
-        }
-        else {
-            setFolderNotExist(true)
-            setFileList([])
-        }
-        console.log(uuidv4())
+    const updateItemList = async () => {
+        let fileType = SEARCH_TYPE[searchFileType[fileTypeIndex].name]
+        let dateCreated = searchDateCreated[dateCreatedIndex].value
+        let [fileRes, folderRes] = await Promise.all([reqSearchFiles(itemName, fileType, dateCreated, nameAsc), 
+            reqSearchFolders(itemName, fileType, dateCreated, nameAsc)])
+        processResponse(folderRes, dispatch, handleAlertOpen)
+        processResponse(fileRes, dispatch, handleAlertOpen)  
+        setFileList(fileRes.data.fileList)
+        setFolderList(folderRes.data.folderList)
         setDataDisplayPageKey(uuidv4())
         setFolderBrowserDialogOpen(false)
         setMoveItemId(null)
@@ -283,40 +285,27 @@ export default function Home() {
     }
 
     useEffect(() => {
-        if (folderSelectValue === null) {
-            return
+        updateItemList()
+        return ()=>{
+            console.log('-----卸载----')
+            dispatch(setItemName(''))
+            dispatch(setFileTypeIndex(0))
+            dispatch(setDateCreatedIndex(0))
         }
-        updateFileList()
-
-    }, [folderStructor, folderSelectValue, nameAsc])
-
-    let { folderList } = getFolders(folderStructor, folderSelectValue)
-    console.log(folderList)
-    let sortedFolderList = [...folderList]
-
-    sortedFolderList.sort((a, b) => {
-        if (nameAsc) {
-            return (a.name > b.name) ? 1:-1
-        }
-        else{
-            return (b.name > a.name) ? 1:-1
-        }
-    })
-
-    console.log(sortedFolderList)
-
+    }, [nameAsc, searchPageKey])
 
     // let formatedFolderList = []
     // for (let folder of folderList) {
     //     formatedFolderList.push({ fileType: 'folder', ...folder })
     // }
-    let listData = [...sortedFolderList, ...fileList]
+    console.log(folderList)
+    let listData = [...folderList, ...fileList]
 
     console.log('listdata', listData)
 
     return (
         <>
-            <DataDisplayPage key={dataDisplayPageKey} folderpath={folderPath} fielddata={fieldData}
+            <DataDisplayPage key={dataDisplayPageKey}  fielddata={fieldData}
                 listdata={listData} menudata={menuData} folderNotExist={folderNotExist}
             />
             {

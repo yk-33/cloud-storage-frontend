@@ -17,6 +17,7 @@ import IconButton from '@mui/material/IconButton';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FolderIcon from '@mui/icons-material/Folder';
+import CloseIcon from '@mui/icons-material/Close';
 
 const itemStyle = {
     'selected':{
@@ -101,8 +102,20 @@ export default function FolderBrowser(props) {
 
     return (
         <Dialog open={folderBrowserDialogOpen} onClose={handleCloseFolderBrowserDialog} onClick={handleClickDialog} maxWidth={'md'}>
-            <DialogTitle sx={{width: '616px', typography:'h6' }} noWrap>{`Move "${moveItemName}"`}</DialogTitle>
-            <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
+            <DialogTitle sx={{width: '616px', typography:'h6', userSelect: 'none' }} noWrap>{`Move "${moveItemName}"`}</DialogTitle>
+            <IconButton
+                    aria-label="close"
+                    onClick={handleCloseFolderBrowserDialog}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 8,
+                        color: (theme) => theme.palette.grey[500],
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            <Stack direction="row" spacing={1} sx={{ alignItems: "center", userSelect: 'none' }}>
                 {
                     folderPath.length === 1 ?
                     <IconButton onClick={handleClickBack} sx={{visibility: 'hidden'}}>
@@ -120,7 +133,7 @@ export default function FolderBrowser(props) {
             </Stack>
             <Divider />
             <DialogContent >
-                <Stack sx={{ height: '270px', width: '616px' }}>
+                <Stack sx={{ height: '270px', width: '616px', userSelect: 'none' }}>
                     {
                         folderList.map((item) =>
                             <Stack direction="row" spacing={1} key={item.id}
@@ -155,9 +168,12 @@ export default function FolderBrowser(props) {
                 </Stack>
             </DialogContent>
             <Divider />
-            <DialogActions>
-                <Button onClick={(e)=>handleCloseFolderBrowserDialog(e)}>Cancel</Button>
-                <Button onClick={(e)=>handleClickMoveFolder(e, selectedFolderId)}>Move</Button>
+            <DialogActions sx={{m: '8px',}}>
+                <Button onClick={(e)=>handleCloseFolderBrowserDialog(e)} size="small">Cancel</Button>
+                <Button onClick={(e)=>handleClickMoveFolder(e, selectedFolderId)} 
+                    size="small"
+                    variant="contained"
+                >Move</Button>
             </DialogActions>
         </Dialog>
     )

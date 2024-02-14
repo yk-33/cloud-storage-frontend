@@ -8,6 +8,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import GifIcon from '@mui/icons-material/Gif';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FolderZipIcon from '@mui/icons-material/FolderZip';
+import SearchIcon from '@mui/icons-material/Search';
 import { pink, green, red, blue, orange, purple, indigo} from '@mui/material/colors';
 
 export default function Icons({type, sx}){
@@ -32,6 +33,7 @@ export default function Icons({type, sx}){
         rar: <FolderZipIcon sx={{color: blue[400],...sx}}/>,
         default: <DescriptionIcon sx={{color: blue[400],...sx}}/>,
         trash: <DeleteIcon sx={{...sx}}/>,
+        search: <SearchIcon sx={{...sx}}/>,
     }
     let iconType = iconMap.hasOwnProperty(type) ? type: 'default'
     return(

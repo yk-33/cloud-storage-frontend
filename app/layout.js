@@ -17,9 +17,13 @@ const theme = createTheme({
     custom: {
       black: '#3d3d3d',
       blue: '#c2e7ff',
+      searchBarBlue: '#e9eef6',
     }
   },
   typography: {
+    h5: {
+      color: 'black'
+    },
     subtitle1: {
       color: '#3d3d3d',
       fontWeight: '600',
@@ -58,6 +62,13 @@ const theme = createTheme({
       styleOverrides:{
         root:{
           borderColor: grey[400]
+        }
+      }
+    },
+    MuiInputBase:{
+      styleOverrides: {
+        sizeSmall:{
+          fontSize: '0.875rem'
         }
       }
     }

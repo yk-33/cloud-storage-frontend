@@ -14,12 +14,7 @@ import { v4 as uuidv4 } from 'uuid';
 const { reqGetDeletedFolders, reqGetDeletedFiles, reqUndoFolderDeletion, reqUndoFileDeletion,
     reqPermanentDeleteFolder, reqPermanentDeleteFile } = api
 
-const fieldData = [
-    { name: 'Name', dataName: 'name', sort: true, },
-    { name: 'File type', dataName: 'fileType', sort: false, },
-    { name: 'File size', dataName: 'fileSize', sort: true, },
-    { name: 'Created time', dataName: 'createdTime', sort: true, },
-]
+
 
 
 
@@ -30,6 +25,8 @@ export default function TrashPage() {
     const [dataDisplayPageKey, setDataDisplayPageKey] = React.useState(0)
     const [alertState, setAlertState] = React.useState({ alertMessage: '123', alertType: 'error', alertOpen: false, });
     const { alertMessage, alertType, alertOpen } = alertState
+    const [nameAsc, setNameAsc] = useState(true)
+
 
     const handleAlertClose = (e) => {
         //e.stopPropagation()
@@ -38,6 +35,13 @@ export default function TrashPage() {
     const handleAlertOpen = (alertMessage, alertType) => {
         setAlertState({ alertMessage, alertType, alertOpen: true })
     }
+
+    const fieldData = [
+        { name: 'Name', dataName: 'name', sort: true, state: nameAsc, action: setNameAsc  },
+        { name: 'File type', dataName: 'fileType', sort: false, },
+        { name: 'File size', dataName: 'fileSize', sort: true, },
+        { name: 'Created time', dataName: 'createdTime', sort: true, },
+    ]
 
     const menuData = {
         'folder': [
@@ -128,12 +132,20 @@ export default function TrashPage() {
     }
 
     const getData = async () => {
-        let [folderRes, fileRes] = await Promise.all([reqGetDeletedFolders(), reqGetDeletedFiles()]);
+        let [folderRes, fileRes] = await Promise.all([reqGetDeletedFolders(), reqGetDeletedFiles(nameAsc)]);
         processResponse(folderRes, dispatch, handleAlertOpen)
         processResponse(fileRes, dispatch, handleAlertOpen)
         let folderList = []
         if(folderRes.data!==null){
             folderList = folderRes.data.deletedFolders;
+            folderList.sort((a, b) => {
+                if (nameAsc) {
+                    return (a.name > b.name) ? 1:-1
+                }
+                else{
+                    return (b.name > a.name) ? 1:-1
+                }
+            })
         }
         let fileList = []
         if(fileRes.data!==null){
@@ -151,7 +163,7 @@ export default function TrashPage() {
 
     useEffect(() => {
         getData()
-    }, [trashPageKey])
+    }, [trashPageKey, nameAsc])
     return (
         <>
             <DataDisplayPage key={dataDisplayPageKey} fielddata={fieldData} listdata={listData}

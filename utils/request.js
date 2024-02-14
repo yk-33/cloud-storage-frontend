@@ -57,7 +57,7 @@ function joinParams(obj) {
     let result = '';
     let item;
     for (item in obj) {
-      if (obj[item] && String(obj[item])) {
+      if (String(obj[item])) {
         result += `&${item}=${obj[item]}`;
       }
     }

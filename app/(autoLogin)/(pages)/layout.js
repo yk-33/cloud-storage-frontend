@@ -72,6 +72,8 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import { BACK_END_URL } from '@/config/config';
+import MySearchBar from '@/components/searchBar/searchBar';
+import AddToDriveTwoToneIcon from '@mui/icons-material/AddToDriveTwoTone';
 
 const pages = ['Products', 'Pricing', 'Blog'];
 const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
@@ -337,7 +339,7 @@ function ResponsiveAppBar({ children }) {
         setShowUploading(false)
     }
 
-    const handleClickRefresh = ()=>{
+    const handleClickRefresh = () => {
         updateFolderStructorAndFolderSelect(dispatch, handleAlertOpen)
         router.replace('/my-drive')
     }
@@ -394,56 +396,28 @@ function ResponsiveAppBar({ children }) {
                 <Container maxWidth="xl">
                     <Toolbar disableGutters sx={{ height: '64px', }}>
                         <Box sx={{
-                            width: '238px'
+                            display: 'flex',
+                            width: '238px',
+                            pl: '20px',
+                            alignItems: 'center',
                         }}>
-                            <AdbIcon sx={{ display: 'flex', mr: 1 }} />
+                            <AddToDriveTwoToneIcon fontSize="large" />
+                            <Typography variant='h6' sx={{ ml: '8px', mt: '4px' }}>
+                                Drive
+                            </Typography>
                         </Box>
 
-                        <Box sx={{ flexGrow: 1 }}>
-                            <Box sx={{
-                                position: 'relative',
-                                borderRadius: 1,
-                                backgroundColor: (theme) => alpha(theme.palette.common.white, 0.15),
-                                '&:hover': {
-                                    backgroundColor: (theme) => alpha(theme.palette.common.white, 0.25),
-                                },
-                                marginLeft: 0,
-                                //flexGrow: 1,
-                                width: '80%',
-                                display: "flex"
-                            }}>
-                                <SearchIconWrapper>
-                                    <SearchIcon />
-                                </SearchIconWrapper>
-                                <StyledInputBase
-                                    placeholder="Search…"
-                                    inputProps={{ 'aria-label': 'search' }}
-                                    onChange={(a) => console.log(a)}
-                                />
-                                {/* <SearchIconWrapper sx={{right: 0, top: 0}}>
-                                <SearchIcon />
-                            </SearchIconWrapper> */}
-                                <IconButton >
-                                    <CloseIcon />
-                                </IconButton>
-                                <IconButton >
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Box>
-
+                        <Box sx={{ display: 'flex', flexGrow: 1, justifyContent: 'center' }}>
+                            <MySearchBar />
                         </Box>
 
-
-                        <Box >
+                        <Box sx={{ width: '238px', display: 'flex', justifyContent: 'flex-end' }}>
                             <Tooltip title={
                                 <React.Fragment>
                                     <Typography color="inherit">Account</Typography>
                                     <Typography sx={{ fontSize: '12px', color: 'grey.400', fontWeight: '500' }}>{userName}</Typography>
                                 </React.Fragment>
                             }>
-                                {/* <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
-                                </IconButton> */}
                                 <IconButton
                                     size="large"
                                     aria-label="account of current user"
@@ -452,7 +426,7 @@ function ResponsiveAppBar({ children }) {
                                     onClick={handleOpenUserMenu}
                                     color="inherit"
                                 >
-                                    <AccountCircle fontSize='large'/>
+                                    <AccountCircle fontSize='large' />
                                 </IconButton>
                             </Tooltip>
                             <Menu
@@ -503,7 +477,7 @@ function ResponsiveAppBar({ children }) {
                 variant="permanent"
                 anchor="left"
             >
-                <Box sx={{ display: 'flex', mb: '8px' }}>
+                <Box sx={{ display: 'flex', mb: '8px', ml: '12px' }}>
                     <Button startIcon={<AddIcon />}
                         onClick={handleClickNewMenu}
                         sx={{
@@ -513,23 +487,23 @@ function ResponsiveAppBar({ children }) {
                         }}
                     >new</Button>
                     <Tooltip title='Refresh' disableInteractive placement='right-start'>
-                    <IconButton 
-                        onClick={handleClickRefresh}
-                        sx={{
-                            ml: '40px',
-                            bgcolor: 'white', '&:hover': { backgroundColor: '#edf2fa' },
-                            width: '56px', height: '56px', boxShadow: '0px 1px 1px 0px rgba(0,0,0,0.5)',
-                            borderRadius: '10px', color: 'text.primary'
-                        }}
-                    >
-                        <RefreshIcon />
-                    </IconButton>
+                        <IconButton
+                            onClick={handleClickRefresh}
+                            sx={{
+                                ml: '40px',
+                                bgcolor: 'white', '&:hover': { backgroundColor: '#edf2fa' },
+                                width: '56px', height: '56px', boxShadow: '0px 1px 1px 0px rgba(0,0,0,0.5)',
+                                borderRadius: '10px', color: 'text.primary'
+                            }}
+                        >
+                            <RefreshIcon />
+                        </IconButton>
                     </Tooltip>
                     <input type="file" multiple ref={inputRef} onChange={handleFileUpload} style={{ visibility: 'hidden', width: '0px' }} />
                 </Box>
                 {/* component={Link} href={"/my-drive"} */}
                 <List>
-                    <ListItem>
+                    <ListItem sx={{ mb: '4px' }}>
                         <Box sx={{ textDecoration: "none" }}>
                             <CommonTreeView ></CommonTreeView>
                         </Box>
@@ -537,11 +511,11 @@ function ResponsiveAppBar({ children }) {
                     {LINKS.map(({ text, href, icon: Icon }) => (
                         <ListItem key={href} disablePadding
                             onClick={handleClickDrawerItem}
-                            sx={{ height: "32px" }}
+                            sx={{ height: "32px", mb: '8px' }}
                         >
                             <ListItemButton component={Link} href={href} selected={pathname === `/${text.toLowerCase()}`}
                                 sx={{ height: "32px" }}>
-                                <ListItemIcon sx={{minWidth: 0, ml:'22px'}}>
+                                <ListItemIcon sx={{ minWidth: 0, ml: '22px' }}>
                                     <Icon />
                                 </ListItemIcon>
                                 <ListItemText primary={text} sx={{ typography: 'body1', pl: '16px' }} />
@@ -568,20 +542,25 @@ function ResponsiveAppBar({ children }) {
             </Box>
             <Dialog open={folderNameDialogOpen} onClose={handleClosefolderNameDialog}>
                 <DialogTitle>New folder</DialogTitle>
-                <DialogContent>
+                <DialogContent sx={{ width: '350px' }}>
                     <TextField
                         autoFocus={true}
                         margin="dense"
                         id="name"
                         fullWidth
-                        variant="standard"
+                        variant="outlined"
+                        size="small"
                         value={newFolderName}
                         onChange={handleInputChangeNewFolderName}
                     />
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClosefolderNameDialog}>Cancel</Button>
-                    <Button onClick={handleClickCreateNewFolder}>Create</Button>
+                <DialogActions sx={{ mr: '16px', mb: '8px' }}>
+                    <Button onClick={handleClosefolderNameDialog} size='small'
+                        sx={{ borderRadius: '16px', }}
+                    >Cancel</Button>
+                    <Button onClick={handleClickCreateNewFolder} size='small' variant='contained'
+                        sx={{ borderRadius: '16px', }}
+                    >OK</Button>
                 </DialogActions>
             </Dialog>
             <Snackbar
