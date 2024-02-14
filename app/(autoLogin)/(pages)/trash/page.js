@@ -10,11 +10,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { updateFolderStructor} from '@/utils/updateStoreFunctions';
 import {processActionResponse, processResponse} from "@/utils/processResponseUtils";
 import { v4 as uuidv4 } from 'uuid';
+import { setItemName, setFileTypeIndex, setDateCreatedIndex } from '@/store/modules/searchParametersStore';
+
 
 const { reqGetDeletedFolders, reqGetDeletedFiles, reqUndoFolderDeletion, reqUndoFileDeletion,
     reqPermanentDeleteFolder, reqPermanentDeleteFile } = api
-
-
 
 
 
@@ -163,6 +163,9 @@ export default function TrashPage() {
 
     useEffect(() => {
         getData()
+        dispatch(setItemName(''))
+        dispatch(setFileTypeIndex(0))
+        dispatch(setDateCreatedIndex(0))
     }, [trashPageKey, nameAsc])
     return (
         <>

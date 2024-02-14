@@ -127,7 +127,8 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
 
 export default function CommonTreeView() {
   const dispatch = useDispatch();
-  
+  const pathName = usePathname()
+
   const {folderStructor} = useSelector(state=>state.folder);
   const {folderSelectValue} = useSelector(state=>state.folderSelect);
   const {folderExpandValue} = useSelector(state=>state.folderExpand);
@@ -160,7 +161,7 @@ export default function CommonTreeView() {
         defaultExpanded={['root']}
         defaultExpandIcon={<ChevronRightIcon/>}
         expanded={folderExpandValue}
-        selected={folderSelectValue===null?null:folderSelectValue.toString()}
+        selected={(folderSelectValue===null||pathName!=='/my-drive')?null:folderSelectValue.toString()}
         onNodeToggle={handleToggle}
         onNodeSelect={handleSelect}
       >

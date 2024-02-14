@@ -323,7 +323,7 @@ function ResponsiveAppBar({ children }) {
     }
 
     const handleClickDrawerItem = () => {
-        dispatch(setFolderSelectValue(null))
+        //dispatch(setFolderSelectValue(null))
     }
 
     const handleClickUserMenu = (action) => {

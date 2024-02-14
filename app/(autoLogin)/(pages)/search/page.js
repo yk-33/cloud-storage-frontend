@@ -286,12 +286,6 @@ export default function Home() {
 
     useEffect(() => {
         updateItemList()
-        return ()=>{
-            console.log('-----卸载----')
-            dispatch(setItemName(''))
-            dispatch(setFileTypeIndex(0))
-            dispatch(setDateCreatedIndex(0))
-        }
     }, [nameAsc, searchPageKey])
 
     // let formatedFolderList = []

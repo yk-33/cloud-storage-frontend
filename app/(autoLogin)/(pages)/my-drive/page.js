@@ -28,7 +28,7 @@ import { processActionResponse, processResponse } from '@/utils/processResponseU
 import { setLoginStatus } from '@/store/modules/loginStore';
 import { v4 as uuidv4 } from 'uuid';
 import CommonDialog from '@/components/commonDialog/commonDialog';
-
+import { setItemName, setFileTypeIndex, setDateCreatedIndex } from '@/store/modules/searchParametersStore';
 
 let { reqGetFileList, reqDeleteFile, reqDeleteFolder, reqMoveFolder, reqMoveFile, reqGetFolderStructure,
     reqDownloadFile, reqDownloadFolder, reqRenameFolder, reqRenameFile } = api;
@@ -287,7 +287,9 @@ export default function Home() {
             return
         }
         updateFileList()
-
+        dispatch(setItemName(''))
+        dispatch(setFileTypeIndex(0))
+        dispatch(setDateCreatedIndex(0))
     }, [folderStructor, folderSelectValue, nameAsc])
 
     let { folderList } = getFolders(folderStructor, folderSelectValue)
