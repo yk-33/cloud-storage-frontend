@@ -85,6 +85,14 @@ export default function Home() {
                         // console.log(`folder${id}`)
                         try {
                             let res = await reqDownloadFolder(id)
+                            if(res.status === 509){
+                                handleAlertOpen("LIMIT_EXCEEDED", 'error')
+                                return
+                            }
+                            else if(res.status === 406){
+                                handleAlertOpen("Folder not exist", 'error')
+                                return
+                            }
                             let data = await res.blob()
                             // console.log(data)
                             if (data.type === 'application/json') {
@@ -92,10 +100,10 @@ export default function Home() {
                                 dispatch(setLoginStatus(-1))
                                 return
                             }
-                            else if (data.type !== "") {
-                                handleAlertOpen("The folder does not exist", 'error')
-                                return
-                            }
+                            // else if (data.type !== "") {
+                            //     handleAlertOpen("The folder does not exist", 'error')
+                            //     return
+                            // }
                             const fileUrl = window.URL.createObjectURL(data)
                             const link = document.createElement('a')
                             link.href = fileUrl
@@ -161,6 +169,10 @@ export default function Home() {
                                 handleAlertOpen("LIMIT_EXCEEDED", 'error')
                                 return
                             }
+                            else if(res.status === 406){
+                                handleAlertOpen("File not exist", 'error')
+                                return
+                            }
                             let data = await res.blob()
                             if (data.type === 'application/json') {
                                 // console.log(data)
@@ -168,10 +180,10 @@ export default function Home() {
                                 dispatch(setLoginStatus(-1))
                                 return
                             }
-                            else if (data.type !== "") {
-                                handleAlertOpen("The file does not exist", 'error')
-                                return
-                            }
+                            // else if (data.type !== "") {
+                            //     handleAlertOpen("The file does not exist", 'error')
+                            //     return
+                            // }
                             const fileUrl = window.URL.createObjectURL(data)
                             const link = document.createElement('a')
                             link.href = fileUrl

@@ -244,7 +244,17 @@ function ResponsiveAppBar({ children }) {
                 thisUpLoadingFiles[index].loaded = thisUpLoadingFiles[index].total
             }
             try {
-                let res = await upLoadFileAxios(formData, thisIndex, thisUpLoadingFiles)
+                let res = null
+                console.log(item.size)
+                if(item.size > 2097152){
+                    res = {
+                        data: {code: 403}
+                    }
+                }
+                else{
+                    res = await upLoadFileAxios(formData, thisIndex, thisUpLoadingFiles)
+                }
+                
                 // console.log(res)
                 thisUpLoadingFiles = _.cloneDeep(thisUpLoadingFiles)
                 if (res.data?.code === 200) {
@@ -256,8 +266,12 @@ function ResponsiveAppBar({ children }) {
                     handleAlertOpen('The parent folder does not exist', 'error')
                     hasFolderNotExistError = true
                 }
+                else if (res.data?.code === 403) {
+                    thisUpLoadingFiles[index].status = 'fail'
+                    handleAlertOpen('File is too large, do not exceed 2MB.', 'error')
+                    hasFolderNotExistError = true
+                }
             } catch (err) {
-                // console.log(err)
                 // console.log(`${item.name}上传错误`)
                 thisUpLoadingFiles = _.cloneDeep(thisUpLoadingFiles)
                 thisUpLoadingFiles[index].status = 'fail'
