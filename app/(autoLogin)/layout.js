@@ -13,7 +13,7 @@ export default function AutoLoginLayout({children}){
     
     const jwtLogin = async()=>{
         let res = await reqJwtLogin()
-        console.log('自动登录结果', res)
+        // console.log('自动登录结果', res)
         if(res.code===200){
             dispatch(setLoginStatus(1))
             dispatch(setUserName(res.data.userName))

@@ -6,7 +6,7 @@ const processActionResponse = async (response, dispatch, handleAlertOpen, codeMa
     let alertStatus = 'error'
 
     if(response.code===403){
-        handleAlertOpen('需要登录', alertStatus)
+        handleAlertOpen('Please login', alertStatus)
         dispatch(setLoginStatus(-1))
         return
     }
@@ -37,7 +37,7 @@ const processResponse = (response, dispatch, handleAlertOpen) => {
         alertStatus = 'success'
     }
     if (response.code === 403) {
-        handleAlertOpen('需要登录', alertStatus)
+        handleAlertOpen('Please login', alertStatus)
         dispatch(setLoginStatus(-1))
     }
     else if (response.code === 503) {

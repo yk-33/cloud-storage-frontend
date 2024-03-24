@@ -23,7 +23,7 @@ export default function ItemDetailCard({ detailCardData }) {
     let dataEmpty = false;
     let showType = 'normal'
     let fileType = detailCardData.fileType
-    console.log(detailCardData, pathName)
+    //// console.log(detailCardData, pathName)
     if (Object.keys(detailCardData).length === 0) {
         if(pathName === '/trash'){
             dataEmpty = true;
@@ -47,7 +47,7 @@ export default function ItemDetailCard({ detailCardData }) {
         }
     }
 
-    console.log(detailCardData)
+    //// console.log(detailCardData)
 
     let detailList = []
 
@@ -79,7 +79,7 @@ export default function ItemDetailCard({ detailCardData }) {
             },
             )
         }
-        if (detailCardData.path !== null) {
+        if (detailCardData.path !== null && detailCardData.path !== undefined) {
             detailCardData.path[0] = 'My Drive'
             detailList.push({
                 name: 'Path',

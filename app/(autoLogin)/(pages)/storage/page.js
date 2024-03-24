@@ -14,6 +14,6 @@ export default function StoragePage(){
     })
 
     return(
-        <p>StoragePage</p>
+        <p>StoragePage,  todo...</p>
     );
 }

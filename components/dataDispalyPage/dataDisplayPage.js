@@ -82,7 +82,7 @@ const listItemStyle = {
 
 export default function DataDisplayPage({ folderpath, fielddata, listdata, menudata, folderNotExist }) {
     useEffect(() => {
-        console.log('DataDisplayPage重新加载')
+        // console.log('DataDisplayPage重新加载')
     }, [])
     const dispatch = useDispatch();
     const { fileTypeIndex, dateCreatedIndex } = useSelector(state => state.searchParameters)
@@ -92,10 +92,10 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
     if (folderpath === undefined) {
         hasFolderPath = false
     }
-    //console.log(fielddata, listdata)
+    //// console.log(fielddata, listdata)
     const headField = fielddata[0]
     const fields = fielddata.slice(1)
-    //console.log(fields)
+    //// console.log(fields)
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [selectedFileType, setSelectedFileType] = useState(null)
     const [selectedId, setSelectedId] = useState(null)
@@ -126,7 +126,7 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
 
     const handleClickItem = (e, id, name, type) => {
         e.stopPropagation()
-        console.log('点击', id, type)
+        // console.log('点击', id, type)
         if (id !== selectedId || type !== selectedFileType) {
             setItemDetailCardKey(uuidv4())
         }
@@ -182,7 +182,7 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
             return listItem
         }
     })
-    //console.log('list',listdata)
+    //// console.log('list',listdata)
     let detailCardData = {}
     if (folderpath && folderpath.length !== 0) {
         detailCardData = folderpath[folderpath.length - 1]

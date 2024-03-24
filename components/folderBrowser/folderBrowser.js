@@ -62,7 +62,7 @@ export default function FolderBrowser(props) {
     }, [folderStructor])
 
 
-    console.log(folderStructor, rootFolderId, folderPath, folderList)
+    // console.log(folderStructor, rootFolderId, folderPath, folderList)
 
 
     const handleMouseEnterFolder = (id) => {
@@ -94,7 +94,7 @@ export default function FolderBrowser(props) {
         setSelectedFolderId(folderPath[folderPath.length - 2].id)
     }
     const handleClickDialog = ()=>{
-        console.log(123)
+        // console.log(123)
         if(folderPath.length>0){
             setSelectedFolderId(folderPath[folderPath.length - 1].id)
         } 

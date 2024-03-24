@@ -92,7 +92,7 @@ const CustomContent = React.forwardRef(function CustomContent(props, ref) {
   };
 
   const handleExpansionClick = (event) => {
-    console.log("expansion")
+    // console.log("expansion")
     handleExpansion(event);
   };
 
@@ -132,17 +132,17 @@ export default function CommonTreeView() {
   const {folderStructor} = useSelector(state=>state.folder);
   const {folderSelectValue} = useSelector(state=>state.folderSelect);
   const {folderExpandValue} = useSelector(state=>state.folderExpand);
-  //console.log(folderStructor)
+  //// console.log(folderStructor)
   const [expanded, setExpanded] = React.useState([]);
   //const [selected, setSelected] = React.useState([]);
 
   const handleToggle = (event, nodeIds) => {
-    console.log(`expand: ${nodeIds}`);
+    // console.log(`expand: ${nodeIds}`);
     dispatch(setFolderExpandValue(nodeIds));
   };
 
   const handleSelect = (event, nodeIds) => {
-    //console.log(`select: ${nodeIds}`);
+    //// console.log(`select: ${nodeIds}`);
     dispatch(setFolderSelectValue(Number(nodeIds)));
   };
   const renderTree = (nodes) => (

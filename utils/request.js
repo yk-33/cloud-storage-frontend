@@ -28,7 +28,6 @@ export async function _fetch(url, method = 'GET', params = {}, data = {} ){
                 credentials: 'include'
             })
         }
-    
         if(res.ok === false){
             let autoResponseBody = await res.json()
             myRes = {
@@ -43,10 +42,10 @@ export async function _fetch(url, method = 'GET', params = {}, data = {} ){
         return myRes
     }
     catch(err){
-        console.log(`response错误: ${err}`)
+        // console.log(`response错误: ${err}`)
         myRes = {
             code: 503,
-            message: '网络问题',
+            message: 'Network failure',
             data: null,
         }
         return myRes

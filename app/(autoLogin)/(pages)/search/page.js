@@ -89,18 +89,18 @@ export default function Home() {
                     name: 'Download',
                     icon: <DownloadIcon />,
                     action: async (id, name) => {
-                        console.log(`folder${id}`)
+                        // console.log(`folder${id}`)
                         try {
                             let res = await reqDownloadFolder(id)
                             let data = await res.blob()
-                            console.log(data)
+                            // console.log(data)
                             if(data.type === 'application/json'){
-                                handleAlertOpen("请登录", 'error')
+                                handleAlertOpen("Please login", 'error')
                                 dispatch(setLoginStatus(-1))
                                 return
                             }
                             else if(data.type !== ""){
-                                handleAlertOpen("文件夹不存在", 'error')
+                                handleAlertOpen("The folder does not exist", 'error')
                                 return
                             }
                             const fileUrl = window.URL.createObjectURL(data)
@@ -110,7 +110,7 @@ export default function Home() {
                             link.click()
                             window.URL.revokeObjectURL(fileUrl)
                         } catch {
-                            handleAlertOpen('网络故障', 'error')
+                            handleAlertOpen('Network failure', 'error')
                         }
                     },
                 },
@@ -130,7 +130,7 @@ export default function Home() {
                     name: 'Move',
                     icon: <DriveFileMoveIcon />,
                     action: (id, name) => {
-                        console.log(`menu${id}`)
+                        // console.log(`menu${id}`)
                         setMoveItemId(id)
                         setMoveItemName(name)
                         setMoveItemType('folder')
@@ -143,12 +143,12 @@ export default function Home() {
                     name: 'Delete',
                     icon: <DeleteIcon />,
                     action: async (id, name) => {
-                        console.log(`menu${id}`)
+                        // console.log(`menu${id}`)
                         let res = await reqDeleteFolder(id)
-                        console.log(res)
+                        // console.log(res)
                         processActionResponse(res, dispatch, handleAlertOpen, {
-                            200: { message: '删除文件夹成功', action: 1 },
-                            450: { message: '删除文件夹失败: 文件夹不存在', action: 1},
+                            200: { message: 'Folder moved to trash', action: 1 },
+                            450: { message: 'Can not delete folder that is not existing', action: 1},
                         })
                         dispatch(setSearchPageKey(uuidv4()))
                     },
@@ -161,17 +161,17 @@ export default function Home() {
                     name: 'Download',
                     icon: <DownloadIcon />,
                     action: async(id, name, type) => {
-                        console.log(`menu${id}`)
+                        // console.log(`menu${id}`)
                         try {
                             let res = await reqDownloadFile(id)
                             let data = await res.blob()
                             if(data.type === 'application/json'){
-                                handleAlertOpen("请登录", 'error')
+                                handleAlertOpen("Please login", 'error')
                                 dispatch(setLoginStatus(-1))
                                 return
                             }
                             else if(data.type !== ""){
-                                handleAlertOpen("文件不存在", 'error')
+                                handleAlertOpen("The file does not exist", 'error')
                                 return
                             }
                             const fileUrl = window.URL.createObjectURL(data)
@@ -181,7 +181,7 @@ export default function Home() {
                             link.click()
                             window.URL.revokeObjectURL(fileUrl)
                         } catch {
-                            handleAlertOpen('网络故障', 'error')
+                            handleAlertOpen('Network failure', 'error')
                         }
                     },
                 },
@@ -201,7 +201,7 @@ export default function Home() {
                     name: 'Move',
                     icon: <DriveFileMoveIcon />,
                     action: (id, name) => {
-                        console.log(`menu${id}`)
+                        // console.log(`menu${id}`)
                         setMoveItemId(id)
                         setMoveItemName(name)
                         setMoveItemType('file')
@@ -214,12 +214,12 @@ export default function Home() {
                     name: 'Delete',
                     icon: <DeleteIcon />,
                     action: async (id, name) => {
-                        console.log(`menu${id}`)
+                        // console.log(`menu${id}`)
                         let res = await reqDeleteFile(id)
-                        console.log(res)
+                        // console.log(res)
                         processActionResponse(res, dispatch, handleAlertOpen, {
-                            200: { message: '删除文件成功', action: 1 },
-                            450: { message: '删除文件失败: 文件不存在', action: 1 },
+                            200: { message: 'File moved to trash', action: 1 },
+                            450: { message: 'Can not delete file that is not existing', action: 1 },
                         })
                         dispatch(setSearchPageKey(uuidv4()))
                     },
@@ -234,7 +234,7 @@ export default function Home() {
     }
     const handleClickMoveFolder = async (e, newFatherFoderId) => {
         e.stopPropagation()
-        console.log(moveItemId, newFatherFoderId)
+        // console.log(moveItemId, newFatherFoderId)
         let res = null
         if (moveItemType === 'folder') {
             res = await reqMoveFolder(moveItemId, newFatherFoderId)
@@ -242,10 +242,10 @@ export default function Home() {
         else {
             res = await reqMoveFile(moveItemId, newFatherFoderId)
         }
-        console.log(res)
+        // console.log(res)
         processActionResponse(res, dispatch, handleAlertOpen, {
-            200: { message: '移动成功', action: 2 },
-            450: { message: `移动失败: ${res.message}`, action: 2 },
+            200: { message: 'Move successful', action: 2 },
+            450: { message: `Move failed: ${res.message}`, action: 2 },
         })
         setFolderBrowserDialogOpen(false)
         router.push('/my-drive')
@@ -260,7 +260,7 @@ export default function Home() {
             res = await reqRenameFile(renameItemId, renameItemName)
         }
         processActionResponse(res, dispatch, handleAlertOpen, {
-            200: { message: `重命名 ${renameItemType} 成功`, action: 1 },
+            200: { message: `Renaming ${renameItemType} successful`, action: 1 },
             450: { action: 2 },
             409: { action: 1 },
         })
@@ -292,10 +292,10 @@ export default function Home() {
     // for (let folder of folderList) {
     //     formatedFolderList.push({ fileType: 'folder', ...folder })
     // }
-    console.log(folderList)
+    // console.log(folderList)
     let listData = [...folderList, ...fileList]
 
-    console.log('listdata', listData)
+    // console.log('listdata', listData)
 
     return (
         <>

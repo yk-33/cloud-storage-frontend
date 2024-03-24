@@ -39,8 +39,8 @@ export default function TrashPage() {
     const fieldData = [
         { name: 'Name', dataName: 'name', sort: true, state: nameAsc, action: setNameAsc  },
         { name: 'File type', dataName: 'fileType', sort: false, },
-        { name: 'File size', dataName: 'fileSize', sort: true, },
-        { name: 'Created time', dataName: 'createdTime', sort: true, },
+        { name: 'File size', dataName: 'fileSize', sort: false, },
+        { name: 'Created time', dataName: 'createdTime', sort: false, },
     ]
 
     const menuData = {
@@ -49,14 +49,14 @@ export default function TrashPage() {
                 {
                     name: 'Restore',
                     icon: <RestoreIcon />,
-                    action: async (id) => {
-                        console.log(`menu${id}`)
+                    action: async (id, name) => {
+                        // console.log(`menu${id}`)
 
                         let res = await reqUndoFolderDeletion(id)
-                        console.log(res)
+                        // console.log(res)
                         processActionResponse(res, dispatch, handleAlertOpen, {
-                            200: {message: '恢复文件夹成功', action: 1},
-                            450: {message: `恢复文件夹失败` ,action: 0},
+                            200: {message: `Restored folder ${name}`, action: 1},
+                            450: {message: `Failed to restore folder` ,action: 0},
                         })
                         if (res.code === 200) {
                             setTrashPageKey(uuidv4())
@@ -70,12 +70,12 @@ export default function TrashPage() {
                     name: 'Delete forever',
                     icon: <DeleteForeverIcon />,
                     action: async (id) => {
-                        console.log(`menu${id}`)
+                        // console.log(`menu${id}`)
                         let res = await reqPermanentDeleteFolder(id)
-                        console.log(res)
+                        // console.log(res)
                         processActionResponse(res, dispatch, handleAlertOpen, {
-                            200: {message: '删除文件夹成功', action: 0},
-                            450: {message: `删除文件夹失败` ,action: 0},
+                            200: {message: 'Folder deleted forever', action: 0},
+                            450: {message: `Folder deletion failed` ,action: 0},
                         })
                         if (res.code === 200) {
                             setTrashPageKey(uuidv4())
@@ -92,13 +92,13 @@ export default function TrashPage() {
                 {
                     name: 'Restore',
                     icon: <RestoreIcon />,
-                    action: async (id) => {
-                        console.log(`menu${id}`)
+                    action: async (id, name) => {
+                        // console.log(`menu${id}`)
                         let res = await reqUndoFileDeletion(id)
-                        console.log(res)
+                        // console.log(res)
                         processActionResponse(res, dispatch, handleAlertOpen, {
-                            200: {message: '恢复文件成功', action: 1},
-                            450: {message: `恢复文件失败` ,action: 0},
+                            200: {message: `Restored file ${name}`, action: 1},
+                            450: {message: `Failed to restore file` ,action: 0},
                         })
                         if (res.code === 200) {
                             setTrashPageKey(uuidv4())
@@ -112,12 +112,12 @@ export default function TrashPage() {
                     name: 'Delete forever',
                     icon: <DeleteForeverIcon />,
                     action: async (id) => {
-                        console.log(`menu${id}`)
+                        // console.log(`menu${id}`)
                         let res = await reqPermanentDeleteFile(id)
-                        console.log(res)
+                        // console.log(res)
                         processActionResponse(res, dispatch, handleAlertOpen, {
-                            200: {message: '删除文件成功', action: 0},
-                            450: {message: `删除文件失败` ,action: 0},
+                            200: {message: 'File deleted forever', action: 0},
+                            450: {message: `File deletion failed` ,action: 0},
                         })
                         if (res.code === 200) {
                             setTrashPageKey(uuidv4())
@@ -151,7 +151,7 @@ export default function TrashPage() {
         if(fileRes.data!==null){
             fileList = fileRes.data.deletedFiles
         }
-        // console.log("142",folderList, fileList)
+        // // console.log("142",folderList, fileList)
         // let formatedFolderList = []
         // for (let folder of folderList) {
         //     formatedFolderList.push({ fileType: 'folder', ...folder })

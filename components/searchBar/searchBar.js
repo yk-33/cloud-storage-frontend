@@ -72,7 +72,7 @@ export default function MySearchBar() {
     }
 
     const search = (e) => {
-        console.log(e, e.keyCode)
+        // console.log(e, e.keyCode)
         if (e.keyCode !== 13) {
             return
         }
@@ -80,7 +80,7 @@ export default function MySearchBar() {
         dispatch(setFileTypeIndex(0))
         dispatch(setDateCreatedIndex(0))
         dispatch(setSearchPageKey(uuidv4()))
-        //dispatch(setFolderSelectValue(null))
+        dispatch(setFolderSelectValue(null))
         router.push('/search')
     }
 
@@ -91,7 +91,7 @@ export default function MySearchBar() {
         dispatch(setFileTypeIndex(fileTypeIndex))
         dispatch(setDateCreatedIndex(dateCreatedIndex))
         dispatch(setSearchPageKey(uuidv4()))
-        //dispatch(setFolderSelectValue(null))
+        dispatch(setFolderSelectValue(null))
         router.push('/search')
     }
 

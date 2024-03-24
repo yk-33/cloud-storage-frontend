@@ -103,7 +103,7 @@ function ResponsiveAppBar({ children }) {
     const [showUploadingDetails, setShowUploadingDetails] = React.useState(true)
     const [showUploadingCloseButton, setShowUploadingCloseButton] = React.useState(false)
 
-    console.log('渲染', isUploading, uploadingFiles)
+    // console.log('渲染', isUploading, uploadingFiles, loginStatus)
     const pathname = usePathname()
 
     let nowUploadingIndex = 0
@@ -148,10 +148,10 @@ function ResponsiveAppBar({ children }) {
                 name: 'New folder',
                 icon: <CreateNewFolderIcon />,
                 action: (id) => {
-                    console.log(`menu${id}`)
+                    // console.log(`menu${id}`)
                     let isExist = checkFolderExist(folderStructor, folderSelectValue)
                     if (!isExist) {
-                        handleAlertOpen('请选择文件夹', 'warning')
+                        handleAlertOpen('Please select a folder', 'warning')
                         return
                     }
                     handleClickOpenfolderNameDialog()
@@ -163,17 +163,17 @@ function ResponsiveAppBar({ children }) {
                 name: 'File upload',
                 icon: <UploadFileIcon />,
                 action: (id) => {
-                    console.log(`menu${id}`)
+                    // console.log(`menu${id}`)
                     let isExist = checkFolderExist(folderStructor, folderSelectValue)
                     if (!isExist) {
-                        handleAlertOpen('请选择文件夹', 'warning')
+                        handleAlertOpen('Please select a folder', 'warning')
                         return
                     }
                     if (!isUploading) {
                         inputRef.current.click()
                     }
                     else {
-                        handleAlertOpen('已有上传任务', 'warning')
+                        handleAlertOpen('There are files being uploaded', 'warning')
                     }
                 },
             },
@@ -188,7 +188,7 @@ function ResponsiveAppBar({ children }) {
             withCredentials: true,
             onUploadProgress: (progressEvent) => {
                 //let progresss = Math.round((progressEvent.loaded / progressEvent.total) * 100);
-                console.log(progressEvent.loaded)
+                // console.log(progressEvent.loaded)
                 // let newUploadingFiles = [ ... parseUploadingFiles]
                 // newUploadingFiles[index].loaded = progressEvent.loaded
                 let newUploadingFiles = parseUploadingFiles.map((item, i) => {
@@ -210,7 +210,7 @@ function ResponsiveAppBar({ children }) {
     const handleFileUpload = async (e) => {
         let isExist = checkFolderExist(folderStructor, folderSelectValue)
         if (!isExist) {
-            handleAlertOpen('请选择文件夹', 'warning')
+            handleAlertOpen('Please select a folder', 'warning')
             inputRef.current.value = ''
             return
         }
@@ -245,7 +245,7 @@ function ResponsiveAppBar({ children }) {
             }
             try {
                 let res = await upLoadFileAxios(formData, thisIndex, thisUpLoadingFiles)
-                console.log(res)
+                // console.log(res)
                 thisUpLoadingFiles = _.cloneDeep(thisUpLoadingFiles)
                 if (res.data?.code === 200) {
                     thisUpLoadingFiles[index].status = 'uploaded'
@@ -253,15 +253,20 @@ function ResponsiveAppBar({ children }) {
                 }
                 else if (res.data?.code === 450) {
                     thisUpLoadingFiles[index].status = 'fail'
-                    handleAlertOpen('文件夹不存在', 'error')
+                    handleAlertOpen('The parent folder does not exist', 'error')
                     hasFolderNotExistError = true
                 }
             } catch (err) {
-                console.log(`${item.name}上传错误`)
+                // console.log(err)
+                // console.log(`${item.name}上传错误`)
                 thisUpLoadingFiles = _.cloneDeep(thisUpLoadingFiles)
                 thisUpLoadingFiles[index].status = 'fail'
                 setUploadingFiles(thisUpLoadingFiles)
-                handleAlertOpen('网络故障', 'error')
+                let errMassage = "Network failure"
+                if(err.response){
+                    errMassage = err.response.data.message
+                }
+                handleAlertOpen(errMassage, 'error')
             }
         }
         inputRef.current.value = ''
@@ -269,7 +274,7 @@ function ResponsiveAppBar({ children }) {
             updateFolderStructorAndFolderSelect(dispatch, handleAlertOpen)
         }
 
-        console.log('最终列表', thisUpLoadingFiles)
+        // console.log('最终列表', thisUpLoadingFiles)
         setUploadingFiles(thisUpLoadingFiles)
         setShowUploadingCloseButton(true)
         setIsUploading(false)
@@ -306,6 +311,7 @@ function ResponsiveAppBar({ children }) {
 
     const handleClosefolderNameDialog = () => {
         setFolderNameDialogOpen(false);
+        setNewFolderName('Untitled folder');
     };
 
     const handleInputChangeNewFolderName = (e) => {
@@ -313,17 +319,18 @@ function ResponsiveAppBar({ children }) {
     }
     const handleClickCreateNewFolder = async () => {
         let res = await reqNewFolder(newFolderName, folderSelectValue)
-        console.log(res)
+        // console.log(res)
         processActionResponse(res, dispatch, handleAlertOpen, {
-            200: { message: '创建文件夹成功', action: 1 },
-            409: { message: `文件夹重名: ${res.message}`, action: 1 },
-            450: { message: `文件夹不存在: ${res.message}`, action: 2 }
+            200: { message: 'Folder created successfully', action: 1 },
+            409: { message: `Folder naming conflict`, action: 1 },
+            450: { message: `The parent folder does not exist`, action: 2 }
         })
         setFolderNameDialogOpen(false);
+        setNewFolderName('Untitled folder');
     }
 
     const handleClickDrawerItem = () => {
-        //dispatch(setFolderSelectValue(null))
+        dispatch(setFolderSelectValue(null))
     }
 
     const handleClickUserMenu = (action) => {
@@ -379,6 +386,7 @@ function ResponsiveAppBar({ children }) {
 
     useEffect(() => {
         if (loginStatus === -1) {
+            // console.log(111111)
             router.push('/log-in')
         }
         else if (loginStatus === 1) {

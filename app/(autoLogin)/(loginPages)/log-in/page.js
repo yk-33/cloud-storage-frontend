@@ -16,7 +16,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import api from '@/api'
 import { useDispatch, useSelector } from 'react-redux';
 import { setLoginStatus, setUserName } from '@/store/modules/loginStore';
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Alert from '@mui/material/Alert';
 import Snackbar from '@mui/material/Snackbar';
 
@@ -27,8 +27,8 @@ function Copyright(props) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
+      <Link color="inherit" href="http://web.simple-cloud-storage.click/">
+        web.simple-cloud-storage.click
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -44,8 +44,9 @@ export default function SignIn() {
   const dispatch = useDispatch();
   const { loginStatus } = useSelector(state => state.login);
   const router = useRouter()
+  const searchParams = useSearchParams()
 
-  const [username, setUsername] = useState('')
+  const [username, setUsername] = useState(searchParams.get('username'))
   const [password, setPassword] = useState('')
   const [alertState, setAlertState] = React.useState({ alertMessage: '123', alertType: 'error', alertOpen: false, });
   const { alertMessage, alertType, alertOpen } = alertState
@@ -71,10 +72,10 @@ export default function SignIn() {
       dispatch(setLoginStatus(1))
       dispatch(setUserName(res.data.userName))
     }
-    else if(res.code === 503){
-      handleAlertOpen('网络故障', 'error')
+    else if (res.code === 503) {
+      handleAlertOpen('Network failure', 'error')
     }
-    else{
+    else {
       handleAlertOpen('Incorrect username or password', 'error')
     }
     // else {
@@ -103,29 +104,34 @@ export default function SignIn() {
         <Typography component="h1" variant="h5" align='right'>
           Sign in
         </Typography>
-        <Box noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            autoFocus
-            value={username}
-            onChange={handleOnChangeUsername}
-          />
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            label="Password"
-            type="password"
-            id="password"
-            autoComplete="current-password"
-            value={password}
-            onChange={handleOnChangePassword}
-          />
-
+        <Box sx={{ mt: 3 }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                id="email"
+                label="Username"
+                autoFocus
+                value={username}
+                onChange={handleOnChangeUsername}
+                helperText=" "
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                required
+                fullWidth
+                label="Password"
+                type="password"
+                id="password"
+                autoComplete="current-password"
+                value={password}
+                onChange={handleOnChangePassword}
+                helperText=" "
+              />
+            </Grid>
+          </Grid>
           <Button
             type="submit"
             fullWidth
@@ -144,7 +150,25 @@ export default function SignIn() {
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
+      <Copyright sx={{ mt: 5 }} />
+      <Box sx={{ position: 'absolute', right: '24px', bottom: '24px', width: '350px', maxWidth: 'calc(50% - 224px)',
+      padding: '16px',
+        background: 'white', boxShadow: '0px 1px 1px 0px rgba(0,0,0,0.5)', borderRadius: '10px'
+     }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: '8px' }}>
+          <Typography variant="h5" component="h2">
+            注意
+          </Typography>
+        </Box>
+        <Box sx={{maxHeight: '380px'}}>
+          <Typography variant="body2" component="h2" sx={{mb: '4px'}}>
+            • 安全のために、日常で使用されているパスワードは使用しないでください。プライバシーファイルをアップロードしないでください。
+          </Typography>
+          <Typography variant="body2" component="h2">
+            • サーバのパフォーマンスには限界があり、最大アップロード可能なファイルサイズは2MBに設定されています。
+          </Typography>
+        </Box>
+      </Box>
       <Snackbar
         anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
         autoHideDuration={3000}
