@@ -27,6 +27,7 @@ export default {
     reqDeleteFile: (fileId)=>_fetch(`/delete-file/${fileId}`, 'DELETE'),
     reqUndoFileDeletion: (fileId)=>_fetch(`/undo-file-deletion/${fileId}`, 'PATCH'),
     reqGetFileList: (folderId, asc)=>_fetch(`/files`, 'GET', {folderId, asc}, {}),
+    reqGetAllFileList: ()=>_fetch(`/all-files`),
     reqGetDeletedFiles: (asc)=>_fetch('/deleted-files', 'GET', {asc}),
     reqRenameFile: (fileId, newName)=>_fetch(`/rename-file/${fileId}`, 'PATCH', {newName}),
 
@@ -35,4 +36,6 @@ export default {
 
     reqSearchFiles: (itemName, fileType, dateCreated, asc)=>_fetch(`/search-files`, 'POST', {}, {itemName, fileType, dateCreated, asc}),
     reqSearchFolders: (itemName, fileType, dateCreated, asc)=>_fetch(`/search-folders`, 'POST', {}, {itemName, fileType, asc}),
+
+    reqGetLogs: (time)=>_fetch(`/logs/${time}`),
 }

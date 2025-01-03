@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { styled, alpha } from '@mui/material/styles';
 import SearchIcon from '@mui/icons-material/Search';
@@ -22,6 +22,8 @@ import { useRouter, usePathname } from 'next/navigation';
 import { setFolderSelectValue } from '@/store/modules/folderSelectStore';
 import { searchFileType, searchDateCreated } from '@/config/config';
 import { v4 as uuidv4 } from 'uuid';
+import { newDesUrl, urlWithoutLanguage } from '@/utils/urlFunctions';
+import { useTranslation } from '@/international/myTranslate';
 
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
@@ -48,9 +50,11 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export default function MySearchBar() {
     const dispatch = useDispatch()
+    const { t, lang } = useTranslation()
     const router = useRouter()
+    const pathname = usePathname()
     const searchParameters = useSelector(state => state.searchParameters)
-    const [searchValue, setSearchValue] = useState('')
+    const [searchValue, setSearchValue] = useState(searchParameters.itemName)
     const [dialogOpen, setDialogOpen] = useState(false)
     const [fileTypeIndex, setThisFileTypeIndex] = useState(0)
     const [itemName, setThisItemName] = useState('')
@@ -81,7 +85,7 @@ export default function MySearchBar() {
         dispatch(setDateCreatedIndex(0))
         dispatch(setSearchPageKey(uuidv4()))
         dispatch(setFolderSelectValue(null))
-        router.push('/search')
+        router.push(newDesUrl(pathname, '/search'))
     }
 
     const advancedSearch = () => {
@@ -92,9 +96,15 @@ export default function MySearchBar() {
         dispatch(setDateCreatedIndex(dateCreatedIndex))
         dispatch(setSearchPageKey(uuidv4()))
         dispatch(setFolderSelectValue(null))
-        router.push('/search')
+        router.push(newDesUrl(pathname, '/search'))
     }
 
+    useEffect(()=>{
+        if(urlWithoutLanguage(pathname) !== '/search'){
+            setSearchValue('')
+            dispatch(setItemName(''))
+        }
+    }, [pathname])
     return (
         <>
             <Box tabindex={'1'} sx={{
@@ -117,7 +127,7 @@ export default function MySearchBar() {
                     <SearchIcon />
                 </SearchIconWrapper>
                 <StyledInputBase
-                    placeholder="Search in Drive"
+                    placeholder={t("Search in Drive")}
                     inputProps={{ 'aria-label': 'search' }}
                     value={searchValue}
                     onChange={(e) => { setSearchValue(e.target.value) }}
@@ -126,7 +136,7 @@ export default function MySearchBar() {
                 {
                     searchValue !== '' &&
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                        <Tooltip title='Clear search' disableInteractive >
+                        <Tooltip title={t('Clear search')} disableInteractive >
                         <IconButton onClick={() => { setSearchValue('') }}>
                             <CloseIcon />
                         </IconButton>
@@ -134,7 +144,7 @@ export default function MySearchBar() {
                     </Box>
                 }
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                <Tooltip title='Advanced search' disableInteractive >
+                <Tooltip title={t('Advanced search')} disableInteractive >
                     <IconButton onClick={handleSettingClick}>
                         <TuneIcon />
                     </IconButton>
@@ -163,7 +173,7 @@ export default function MySearchBar() {
                     <Box sx={{ width: '500px', height: '50px', mt: '8px', mb: '8px', display: 'flex', alignItems: 'center' }} >
                         <Box sx={{ width: '150px', display: 'flex', alignItems: 'center' }}>
                             <Typography variant="subtitle2">
-                                {"Type"}
+                                {t("Type")}
                             </Typography>
                         </Box>
                         <Select
@@ -188,7 +198,7 @@ export default function MySearchBar() {
                                             }
 
                                             <Typography variant='body2'>
-                                                {item.name}
+                                                {t(item.name)}
                                             </Typography>
                                         </Stack>
                                     </MenuItem>
@@ -200,11 +210,11 @@ export default function MySearchBar() {
                     <Box sx={{ width: '500px', height: '50px', mt: '8px', mb: '8px', display: 'flex', alignItems: 'center' }} >
                         <Box sx={{ width: '150px', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
                             <Typography variant="subtitle2">
-                                {"Item name"}
+                                {t("Item name")}
                             </Typography>
                         </Box>
                         <TextField
-                            placeholder='Enter a term that matches the file name'
+                            placeholder={t('Enter a term that matches the file name')}
                             value={itemName}
                             onChange={(e) => { setThisItemName(e.target.value) }}
                             fullWidth
@@ -215,7 +225,7 @@ export default function MySearchBar() {
                     <Box sx={{ width: '500px', height: '50px', mt: '8px', mb: '8px', display: 'flex', alignItems: 'center' }} >
                         <Box sx={{ width: '150px', display: 'flex', alignItems: 'center' }}>
                             <Typography variant="subtitle2">
-                                {"Date created"}
+                                {t("Date created")}
                             </Typography>
                         </Box>
                         <Select
@@ -231,7 +241,7 @@ export default function MySearchBar() {
                                     <MenuItem value={index} key={index}>
                                         <Stack direction="row" spacing={1} sx={{ alignItems: "center" }}>
                                             <Typography variant="body2" >
-                                                {item.name}
+                                                {t(item.name)}
                                             </Typography>
                                         </Stack>
                                     </MenuItem>
@@ -243,7 +253,7 @@ export default function MySearchBar() {
                 </DialogContent>
                 <DialogActions sx={{ m: '8px' }}>
                     <Button autoFocus variant="contained" size="small" onClick={advancedSearch}>
-                        Search
+                        {t('Search')}
                     </Button>
                 </DialogActions>
             </Dialog>

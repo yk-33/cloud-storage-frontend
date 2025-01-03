@@ -6,14 +6,16 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import TextField from '@mui/material/TextField';
 import { Button } from '@mui/material';
-
+import { useTranslation } from '@/international/myTranslate';
 
 export default function CommonDialog({ dialogValue, dialogTitle, dialogConfirmName, dialogOpen,
     handleCloseDialog, handleInputChangeDialog, handleConfirmDialog }) {
 
+        const { t, lang } = useTranslation()
+
     return (
         <Dialog open={dialogOpen} onClose={handleCloseDialog} >
-            <DialogTitle>{dialogTitle}</DialogTitle>
+            <DialogTitle>{t(dialogTitle)}</DialogTitle>
             <DialogContent sx={{ width: '350px' }}>
                 <TextField
                     autoFocus={true}
@@ -29,10 +31,10 @@ export default function CommonDialog({ dialogValue, dialogTitle, dialogConfirmNa
             <DialogActions sx={{ mr: '16px', mb: '8px' }}>
                 <Button onClick={handleCloseDialog} size="small"
                     sx={{ borderRadius: '16px', }}
-                >Cancel</Button>
+                >{t('Cancel')}</Button>
                 <Button onClick={handleConfirmDialog} variant="contained" size="small"
                     sx={{ borderRadius: '16px', }}
-                >{dialogConfirmName}</Button>
+                >{t(dialogConfirmName)}</Button>
             </DialogActions>
         </Dialog>
     )

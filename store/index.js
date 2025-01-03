@@ -4,6 +4,7 @@ import folderSelectReducer from "./modules/folderSelectStore";
 import folderExpandReducer from "./modules/folderExpandStore";
 import loginReducer from "./modules/loginStore";
 import searchParametersReducer from "./modules/searchParametersStore";
+import alertReducer from "./modules/alertStore";
 
 const store = configureStore({
     reducer: {
@@ -12,6 +13,7 @@ const store = configureStore({
         folderExpand: folderExpandReducer,
         login: loginReducer,
         searchParameters: searchParametersReducer,
+        alert: alertReducer,
     }
 })
 

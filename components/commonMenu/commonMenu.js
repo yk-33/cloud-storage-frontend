@@ -11,9 +11,10 @@ import ContentCopy from '@mui/icons-material/ContentCopy';
 import ContentPaste from '@mui/icons-material/ContentPaste';
 import Cloud from '@mui/icons-material/Cloud';
 import Menu from '@mui/material/Menu';
+import { useTranslation } from '@/international/myTranslate';
 
 export default function CommonMenu({ itemId, itemName, itemType, data, anchorel, open, setanchorel }) {
-
+  const { t, lang } = useTranslation()
   const handleClose = ()=>{
     setanchorel(null)
   }
@@ -48,7 +49,7 @@ export default function CommonMenu({ itemId, itemName, itemType, data, anchorel,
                     <ListItemIcon>
                       {item.icon}
                     </ListItemIcon>
-                    <ListItemText>{item.name}</ListItemText>
+                    <ListItemText>{t(item.name)}</ListItemText>
                   </MenuItem>
                 )
               }

@@ -60,8 +60,10 @@ function joinParams(obj) {
         result += `&${item}=${obj[item]}`;
       }
     }
+    
     if (result) {
       result = '&' + result.slice(1);
     }
+    
     return result;
 }

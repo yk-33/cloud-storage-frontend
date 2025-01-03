@@ -18,6 +18,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import FolderIcon from '@mui/icons-material/Folder';
 import CloseIcon from '@mui/icons-material/Close';
+import { useTranslation } from '@/international/myTranslate';
+
 
 const itemStyle = {
     'selected':{
@@ -38,6 +40,7 @@ export default function FolderBrowser(props) {
     const { folderBrowserDialogOpen, handleCloseFolderBrowserDialog, handleClickMoveFolder,
          moveFolderId, moveItemName} = props
     const dispatch = useDispatch();
+    const { t, lang } = useTranslation()
     const { folderStructor } = useSelector(state => state.folder);
     const { folderSelectValue } = useSelector(state => state.folderSelect);
 
@@ -102,7 +105,8 @@ export default function FolderBrowser(props) {
 
     return (
         <Dialog open={folderBrowserDialogOpen} onClose={handleCloseFolderBrowserDialog} onClick={handleClickDialog} maxWidth={'md'}>
-            <DialogTitle sx={{width: '616px', typography:'h6', userSelect: 'none' }} noWrap>{`Move "${moveItemName}"`}</DialogTitle>
+            <DialogTitle sx={{width: '616px', typography:'h6', userSelect: 'none' }} noWrap>{lang==='en'?`Move "${moveItemName}"`: `"${moveItemName}" を移動`}
+            </DialogTitle>
             <IconButton
                     aria-label="close"
                     onClick={handleCloseFolderBrowserDialog}
@@ -169,11 +173,11 @@ export default function FolderBrowser(props) {
             </DialogContent>
             <Divider />
             <DialogActions sx={{m: '8px',}}>
-                <Button onClick={(e)=>handleCloseFolderBrowserDialog(e)} size="small">Cancel</Button>
+                <Button onClick={(e)=>handleCloseFolderBrowserDialog(e)} size="small">{t('Cancel')}</Button>
                 <Button onClick={(e)=>handleClickMoveFolder(e, selectedFolderId)} 
                     size="small"
                     variant="contained"
-                >Move</Button>
+                >{t('Move')}</Button>
             </DialogActions>
         </Dialog>
     )

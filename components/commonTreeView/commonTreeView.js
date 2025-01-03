@@ -12,25 +12,29 @@ import { setFolderSelectValue } from '@/store/modules/folderSelectStore';
 import { setFolderExpandValue } from '@/store/modules/folderExpandStore';
 import { useRouter, usePathname } from 'next/navigation'
 import FolderIcon from '@mui/icons-material/Folder';
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined';
+import { newLanguageUrl, urlWithoutLanguage, newDesUrl } from '@/utils/urlFunctions';
+import { useTranslation } from '@/international/myTranslate';
 
 const CustomContentRoot = styled('div')(({ theme }) => ({
-  height:"32px",
-  '&.MuiTreeItem-content':{
+  height: "32px",
+  '&.MuiTreeItem-content': {
     padding: "0px"
   },
   '.MuiTreeItem-iconContainer #myIconContainer svg': {
-    fontSize:"24px",
+    fontSize: "24px",
   },
   WebkitTapHighlightColor: 'transparent',
   '&&:hover, &&.Mui-disabled, &&.Mui-focused, &&.Mui-selected, &&.Mui-selected.Mui-focused, &&.Mui-selected:hover':
-    {
-      backgroundColor: 'transparent',
-    },
+  {
+    backgroundColor: 'transparent',
+  },
   '.MuiTreeItem-contentBar': {
     position: 'absolute',
     width: '100%',
     height: 32,
     left: 0,
+    borderRadius: '15px',
   },
   '&:hover .MuiTreeItem-contentBar': {
     backgroundColor: theme.palette.action.hover,
@@ -43,7 +47,7 @@ const CustomContentRoot = styled('div')(({ theme }) => ({
     opacity: theme.palette.action.disabledOpacity,
     backgroundColor: 'transparent',
   },
-  '&.Mui-selected .MuiTreeItem-contentBar': {  
+  '&.Mui-selected .MuiTreeItem-contentBar': {
     backgroundColor: theme.palette.custom.blue,
   },
   '&.Mui-selected:hover .MuiTreeItem-contentBar': {
@@ -60,6 +64,7 @@ const CustomContentRoot = styled('div')(({ theme }) => ({
 
 const CustomContent = React.forwardRef(function CustomContent(props, ref) {
   const router = useRouter()
+  const pathName = usePathname()
   const {
     className,
     classes,
@@ -87,7 +92,7 @@ const CustomContent = React.forwardRef(function CustomContent(props, ref) {
   };
 
   const handleSelectionClick = (event) => {
-    router.push('/my-drive')
+    router.push(newDesUrl(pathName, '/my-drive'))
     handleSelection(event);
   };
 
@@ -108,13 +113,16 @@ const CustomContent = React.forwardRef(function CustomContent(props, ref) {
       ref={ref}
       onClick={handleMouseDown}
     >
-      <div className="MuiTreeItem-contentBar"  onClick={handleSelectionClick}/>
-      <div onClick={handleExpansionClick} className={classes.iconContainer} style={{zIndex: 1201, marginRight:"0px", width:"24px"}}>
-        <div id='myIconContainer' style={{alignItems:'center', height:'24px'}}>{icon}</div>
-        
-        </div>
-        <FolderIcon sx={{zIndex: 1201,}}/>
-      <Typography onClick={handleSelectionClick} component="div" className={classes.label} style={{paddingLeft:"16px"}} noWrap>
+      <div className="MuiTreeItem-contentBar" onClick={handleSelectionClick} />
+      <div onClick={handleExpansionClick} className={classes.iconContainer} style={{ zIndex: 1201, marginRight: "0px", width: "24px" }}>
+        <div id='myIconContainer' style={{ alignItems: 'center', height: '24px' }}>{icon}</div>
+      </div>
+      {
+        selected ?
+          <FolderIcon sx={{ zIndex: 1201, }} /> :
+          <FolderOutlinedIcon sx={{ zIndex: 1201, }} />
+      }
+      <Typography onClick={handleSelectionClick} component="div" className={classes.label} style={{ paddingLeft: "16px" }} noWrap>
         {label}
       </Typography>
     </CustomContentRoot>
@@ -128,13 +136,13 @@ const CustomTreeItem = React.forwardRef(function CustomTreeItem(props, ref) {
 export default function CommonTreeView() {
   const dispatch = useDispatch();
   const pathName = usePathname()
+  const { t, lang } = useTranslation()
 
-  const {folderStructor} = useSelector(state=>state.folder);
-  const {folderSelectValue} = useSelector(state=>state.folderSelect);
-  const {folderExpandValue} = useSelector(state=>state.folderExpand);
-  //// console.log(folderStructor)
-  const [expanded, setExpanded] = React.useState([]);
-  //const [selected, setSelected] = React.useState([]);
+  const { folderStructor } = useSelector(state => state.folder);
+  const { folderSelectValue } = useSelector(state => state.folderSelect);
+  const { folderExpandValue } = useSelector(state => state.folderExpand);
+  
+  let modifiedFolderStructor = {...folderStructor, name: t("My Drive")}
 
   const handleToggle = (event, nodeIds) => {
     // console.log(`expand: ${nodeIds}`);
@@ -154,18 +162,18 @@ export default function CommonTreeView() {
   );
 
   return (
-    <Box sx={{  flexGrow: 1, maxWidth: 300 }}>
+    <Box sx={{ flexGrow: 1, maxWidth: 300 }}>
       <TreeView
         aria-label="rich object"
-        defaultCollapseIcon={<ExpandMoreIcon/>}
+        defaultCollapseIcon={<ExpandMoreIcon />}
         defaultExpanded={['root']}
-        defaultExpandIcon={<ChevronRightIcon/>}
+        defaultExpandIcon={<ChevronRightIcon />}
         expanded={folderExpandValue}
-        selected={(folderSelectValue===null||pathName!=='/my-drive')?null:folderSelectValue.toString()}
+        selected={(folderSelectValue === null || urlWithoutLanguage(pathName) !== '/my-drive') ? null : folderSelectValue.toString()}
         onNodeToggle={handleToggle}
         onNodeSelect={handleSelect}
       >
-        {renderTree(folderStructor)}
+        {renderTree(modifiedFolderStructor)}
       </TreeView>
     </Box>
   );

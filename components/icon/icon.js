@@ -9,15 +9,17 @@ import GifIcon from '@mui/icons-material/Gif';
 import DeleteIcon from '@mui/icons-material/Delete';
 import FolderZipIcon from '@mui/icons-material/FolderZip';
 import SearchIcon from '@mui/icons-material/Search';
+import CloudIcon from '@mui/icons-material/Cloud';
 import { pink, green, red, blue, orange, purple, indigo} from '@mui/material/colors';
 
 export default function Icons({type, sx}){
     
     const iconMap = {
         folder: <FolderIcon  sx={{...sx}}/>,
-        jepg: <InsertPhotoIcon  sx={{color: red[400],...sx}}/>,
+        jpeg: <InsertPhotoIcon  sx={{color: red[400],...sx}}/>,
         jpg: <InsertPhotoIcon  sx={{color: red[400],...sx}}/>,
         png: <InsertPhotoIcon  sx={{color: red[400],...sx}}/>,
+        svg: <InsertPhotoIcon  sx={{color: red[400],...sx}}/>,
         gif: <GifIcon sx={{color: red[400],...sx}}/>,
         pdf: <PictureAsPdfIcon sx={{color: red[400],...sx}}/>,
         torrent: <LinkIcon sx={{color: orange[400],...sx}}/>,
@@ -33,6 +35,7 @@ export default function Icons({type, sx}){
         rar: <FolderZipIcon sx={{color: blue[400],...sx}}/>,
         default: <DescriptionIcon sx={{color: blue[400],...sx}}/>,
         trash: <DeleteIcon sx={{...sx}}/>,
+        storage: <CloudIcon sx={{...sx}}/>,
         search: <SearchIcon sx={{...sx}}/>,
     }
     let iconType = iconMap.hasOwnProperty(type) ? type: 'default'

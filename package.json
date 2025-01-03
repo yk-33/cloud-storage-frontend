@@ -20,12 +20,18 @@
     "antd": "^5.11.1",
     "axios": "^1.6.2",
     "filesize": "^10.1.0",
+    "formatjs": "^0.1.1",
     "lodash": "^4.17.21",
+    "negotiator": "^1.0.0",
     "next": "14.0.1",
+    "next-translate": "^2.6.2",
     "react": "^18",
     "react-dom": "^18",
     "react-hook-form": "^7.48.2",
     "react-redux": "^9.0.2",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "next-translate-plugin": "^2.6.2"
   }
 }

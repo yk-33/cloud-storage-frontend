@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const loginStore = createSlice({
-    name: "loginStatusRecord",  //0: 初始, -1:失败, 1:成功 
+    name: "loginStatusRecord",  //0: 初始, -1:失败, 1:成功, 2:管理员
     initialState: {
         loginStatus: 0,
         userName: '',

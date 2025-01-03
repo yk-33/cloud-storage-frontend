@@ -43,8 +43,10 @@ import { useRouter, usePathname } from 'next/navigation';
 import { setFileTypeIndex, setDateCreatedIndex, setSearchPageKey } from '@/store/modules/searchParametersStore';
 import { searchFileType, searchDateCreated } from '@/config/config';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-
-
+import { Spin } from 'antd';
+import { LoadingOutlined } from '@ant-design/icons';
+import { newLanguageUrl, urlWithoutLanguage ,newDesUrl } from '@/utils/urlFunctions';
+import { useTranslation } from '@/international/myTranslate';
 
 const StyledBreadcrumb = styled(Chip)(({ theme }) => {
     const backgroundColor =
@@ -80,18 +82,32 @@ const listItemStyle = {
 }
 
 
-export default function DataDisplayPage({ folderpath, fielddata, listdata, menudata, folderNotExist }) {
+
+export default function DataDisplayPage({ initializing, folderpath, fielddata, listdata, menudata, folderNotExist,
+    TitleComponent, EmptyComponent
+}) {
+    
     useEffect(() => {
         // console.log('DataDisplayPage重新加载')
     }, [])
     const dispatch = useDispatch();
+    const { t, lang } = useTranslation()
     const { fileTypeIndex, dateCreatedIndex } = useSelector(state => state.searchParameters)
-    const pathName = usePathname()
+    const pathnameWithLang = usePathname()
+    const pathName = urlWithoutLanguage(pathnameWithLang)
     const router = useRouter()
+
+    
     let hasFolderPath = true
     if (folderpath === undefined) {
         hasFolderPath = false
     }
+    
+    console.log(folderpath)
+    if(folderpath && folderpath.length!==0){
+        folderpath[0] = {...folderpath[0], name: t('My Drive')}
+    }
+    
     //// console.log(fielddata, listdata)
     const headField = fielddata[0]
     const fields = fielddata.slice(1)
@@ -104,6 +120,7 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
     const [itemDetailCardKey, setItemDetailCardKey] = useState(0)
 
     const pathListOpen = Boolean(pathListAnchorEl);
+
     const handleClickPathList = (event) => {
         setPathListAnchorEl(event.currentTarget);
     };
@@ -139,8 +156,8 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
             case 2:
                 if (type === 'folder') {
                     dispatch(setFolderSelectValue(id))
-                    if (pathName === '/search'){
-                        router.push('/my-drive')
+                    if (pathName === '/search') {
+                        router.push(newDesUrl(pathnameWithLang, '/my-drive'))
                     }
                 }
                 break
@@ -171,8 +188,6 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
     }
 
 
-
-
     listdata = listdata.map(listItem => {
         if (listItem.hasOwnProperty('fileSize')) {
             let fileSize = Number(listItem.fileSize)
@@ -187,7 +202,7 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
     if (folderpath && folderpath.length !== 0) {
         detailCardData = folderpath[folderpath.length - 1]
     }
-
+    
     if (selectedId !== null) {
         listdata.forEach(item => {
             if (item.fileType === selectedFileType && item.id === selectedId) {
@@ -200,14 +215,14 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
     if (pathName === '/search') {
         if (fileTypeIndex !== 0) {
             searchArray.push(<Chip
-                label={searchFileType[fileTypeIndex].name}
+                label={t(searchFileType[fileTypeIndex].name)}
                 key="fileType" color="secondary"
                 onDelete={handleDeleteIconFileType}
             />)
         }
         if (dateCreatedIndex !== 0) {
             searchArray.push(<Chip
-                label={searchDateCreated[dateCreatedIndex].name}
+                label={t(searchDateCreated[dateCreatedIndex].name)}
                 key="dateCreated" color="secondary"
                 onDelete={handleDeleteIconDateCreated}
             />)
@@ -221,10 +236,12 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
                     flexGrow: 1, padding: "8px", display: "flex", flexDirection: "column", minWidth: 0,
                     bgcolor: 'background.paper', borderRadius: '15px', color: 'text.secondary', userSelect: 'none'
                 }}>
-                    <Box sx={{ display: "flex", alignItems: 'center', height: "64px", mb: "8px", ml: '8px', flexShrink: 0 }}>
+                    {TitleComponent !== undefined && < TitleComponent />}
+                    <Box sx={{ display: "flex", alignItems: 'center', mb: "8px", ml: '8px', flexShrink: 0 }}>
                         {
                             hasFolderPath ?
-                                <Breadcrumbs aria-label="breadcrumb" separator={<NavigateNextIcon fontSize="small" />}>
+                                <Breadcrumbs aria-label="breadcrumb" sx={{ height: "64px", display: "flex", alignItems: 'center' }}
+                                    separator={<NavigateNextIcon fontSize="small" />}>
                                     {
                                         pathCollapsed &&
                                         <StyledBreadcrumb
@@ -246,14 +263,10 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
                                             />
                                         )
                                     }
-                                </Breadcrumbs> :
-                                <></>
-                        }
-                        {
-                            pathName === '/search' &&
-                            <Typography variant='h5'>
-                                Search results
-                            </Typography>
+                                </Breadcrumbs> : (
+                                    TitleComponent !== undefined ?
+                                        <></> : < Box sx={{ height: "64px" }} />
+                                )
                         }
                     </Box>
                     {
@@ -263,88 +276,107 @@ export default function DataDisplayPage({ folderpath, fielddata, listdata, menud
                         </Stack>
                     }
                     {
-                        folderNotExist ?
-                            <Empty description={<span style={{ color: grey[500] }}>
-                                Folder not exist
-                            </span>
-                            } /> :
-                            <Stack divider={<Divider />} sx={{ minHeight: 0, flexGrow: 1 }}>
-                                <Stack direction="row" spacing={1} sx={{
-                                    height: "40px", flexShrink: 0,
-
+                        initializing ?
+                            <Box sx={{
+                                display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1,
+                                overflow: 'auto'
+                            }}>
+                                <Spin indicator={<LoadingOutlined spin />} size="large" />
+                            </Box> :
+                            folderNotExist ?
+                                <Box sx={{
+                                    display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1,
+                                    overflow: 'auto'
                                 }}>
-                                    <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexGrow: 1 }}>
-                                        <Typography variant="subtitle2" >
-                                            {headField.name}
-                                        </Typography>
-                                        {
-                                            headField.sort &&
-                                            <IconButton size="small" onClick={()=>headField.action(!headField.state)}>
-                                                {
-                                                    headField.state ?
-                                                    <ArrowUpwardIcon fontSize="small" /> :
-                                                    <ArrowDownwardIcon fontSize="small" />
-                                                }
-                                            </IconButton>
-                                        }
-                                    </Stack>
-                                    {
-                                        fields.map((field, index) =>
-                                            <Stack key={index} direction="row" spacing={1} sx={{ width: "130px", alignItems: "center" }}>
-                                                <Typography variant="subtitle2" noWrap>
-                                                    {field.name}
+                                    <Empty description={<span style={{ color: grey[500] }}>  Folder not exist </span>} />
+                                </Box> :
+                                (EmptyComponent !== undefined && EmptyComponent !== null) ?
+                                    <Box sx={{
+                                        display: 'flex', justifyContent: 'center', alignItems: 'center', flexGrow: 1,
+                                        overflow: 'auto'
+                                    }}>
+                                        <EmptyComponent />
+                                    </Box> :
+                                    <Stack divider={<Divider />} sx={{ minHeight: 0, flexGrow: 1 }}>
+                                        <Stack direction="row" spacing={1} sx={{
+                                            height: "40px", flexShrink: 0,
+
+                                        }}>
+                                            <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexGrow: 1 }}>
+                                                <Typography variant="subtitle2" >
+                                                    {t(headField.name)}
                                                 </Typography>
                                                 {
-                                                    field.sort &&
-                                                    <IconButton size="small">
-                                                        <ArrowUpwardIcon fontSize="small" />
+                                                    headField.sort &&
+                                                    <IconButton size="small" onClick={() => headField.action(!headField.state)}>
+                                                        {
+                                                            headField.state ?
+                                                                <ArrowUpwardIcon fontSize="small" /> :
+                                                                <ArrowDownwardIcon fontSize="small" />
+                                                        }
                                                     </IconButton>
                                                 }
                                             </Stack>
-
-                                        )
-                                    }
-                                    <IconButton size="small" sx={{ width: "40px", visibility: 'hidden' }}>
-                                        <MoreVertIcon fontSize="small" />
-                                    </IconButton>
-                                </Stack>
-                                <Box sx={{ flexGrow: 1, minHeight: 0, overflow: 'auto' }}>
-                                    {
-                                        listdata.map((item, index) =>
-                                            <Stack key={index} direction="row"
-                                                onClick={(e) => handleClickItem(e, item.id, item.name, item.fileType)}
-                                                spacing={1} sx={(selectedId === item.id && selectedFileType === item.fileType) ?
-                                                    listItemStyle['clicked'] : listItemStyle['normal']
-                                                }>
-
-                                                <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexGrow: 1, minWidth: 0, flexShrink: 1 }}>
-                                                    <Box sx={{ display: "flex", alignItems: "center", pl: "8px" }}>
-                                                        <Icons type={item.fileType} />
-                                                    </Box>
-                                                    <Tooltip title={item.name} disableInteractive>
-                                                        <Typography variant="subtitle2" noWrap sx={{ overflow: 'hidden' }} >
-                                                            {item.name}
+                                            {
+                                                fields.map((field, index) =>
+                                                    <Stack key={index} direction="row" spacing={1}
+                                                        sx={{ width: field.name === 'File type' ? "80px" : '100px', alignItems: "center" }}>
+                                                        <Typography variant="subtitle2" noWrap>
+                                                            {t(field.name)}
                                                         </Typography>
-                                                    </Tooltip>
+                                                        {
+                                                            field.sort &&
+                                                            <IconButton size="small">
+                                                                <ArrowUpwardIcon fontSize="small" />
+                                                            </IconButton>
+                                                        }
+                                                    </Stack>
 
-                                                </Stack>
-                                                {
-                                                    fields.map((field, index) =>
-                                                        <Stack key={index} direction="row" spacing={1} sx={{ width: "130px", alignItems: "center", flexShrink: 0 }}>
-                                                            <Typography variant="body2" >
-                                                                {item[field.dataName]}
-                                                            </Typography>
+                                                )
+                                            }
+                                            <IconButton size="small" sx={{ width: "40px", visibility: 'hidden' }}>
+                                                <MoreVertIcon fontSize="small" />
+                                            </IconButton>
+                                        </Stack>
+                                        <Box sx={{ flexGrow: 1, minHeight: 0, overflow: 'auto' }}>
+                                            {
+                                                listdata.map((item, index) =>
+                                                    <Stack key={index} direction="row"
+                                                        onClick={(e) => handleClickItem(e, item.id, item.name, item.fileType)}
+                                                        spacing={1} sx={(selectedId === item.id && selectedFileType === item.fileType) ?
+                                                            listItemStyle['clicked'] : listItemStyle['normal']
+                                                        }>
+
+                                                        <Stack direction="row" spacing={1} sx={{ alignItems: "center", flexGrow: 1, minWidth: '100px', flexShrink: 1 }}>
+                                                            <Box sx={{ display: "flex", alignItems: "center", pl: "8px" }}>
+                                                                <Icons type={item.fileType.toLowerCase()} />
+                                                            </Box>
+                                                            <Tooltip title={item.name} disableInteractive>
+                                                                <Typography variant="subtitle2" noWrap sx={{ overflow: 'hidden' }} >
+                                                                    {item.name}
+                                                                </Typography>
+                                                            </Tooltip>
+
                                                         </Stack>
-                                                    )
-                                                }
-                                                <IconButton size="small" onClick={handleClickMoreIcon} sx={{ width: "40px" }}>
-                                                    <MoreVertIcon fontSize="small" />
-                                                </IconButton>
-                                            </Stack>
-                                        )
-                                    }
-                                </Box>
-                            </Stack>
+                                                        {
+                                                            fields.map((field, index) =>
+                                                                <Stack key={index} direction="row" spacing={1}
+                                                                    sx={{ width: field.name === 'File type' ? "80px" : '100px', alignItems: "center", flexShrink: 0 }}>
+                                                                    <Typography variant="body2" >
+                                                                        {field.name === 'File type'&&item[field.dataName]==='folder'?
+                                                                        t('folder'): item[field.dataName]}
+                                                                    </Typography>
+                                                                </Stack>
+                                                            )
+                                                        }
+                                                        <IconButton size="small" onClick={handleClickMoreIcon} sx={{ width: "40px" }}>
+                                                            <MoreVertIcon fontSize="small" />
+                                                        </IconButton>
+                                                    </Stack>
+                                                )
+                                            }
+                                        </Box>
+                                    </Stack>
                     }
                     {open && <CommonMenu itemId={selectedId} itemName={selectedName} itemType={selectedFileType}
                         data={thisMenuData} open={open} anchorel={anchorEl} setanchorel={setAnchorEl} />}
