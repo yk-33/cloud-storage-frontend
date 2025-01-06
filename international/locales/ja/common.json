@@ -43,7 +43,7 @@
   "VIDEO": "動画",
   "TRASH": "ゴミ箱",
   "AVAILABLE": "空き容量",
-  "Any": "任意",
+  "Any": "すべて",
   "Photos & images": "画像",
   "PDFs": "PDF",
   "Documents": "ドキュメント",
@@ -72,7 +72,7 @@
     "Storage full. Clear files to free up space.": "ストレージがいっぱいです。ファイルを削除して空き容量を確保してください。",
     "Untitled folder": "無題のフォルダ",
     "Folder created successfully": "フォルダが作成されました",
-    "Folder naming conflict": "フォルダ名が競合しています",
+    "Folder naming conflict": "フォルダ名が重複しています",
     "japanese": "日本語",
     "english": "英語",
     "Language": "言語",
@@ -117,6 +117,8 @@
     "No files are using storage": "保存容量を使用しているファイルはありません",
     "Renaming folder successful": "名前変更が成功しました",
     "Renaming file successful": "名前変更が成功しました",
+    "Renaming folder failed": "名前変更が失敗しました",
+    "Renaming file failed": "名前変更が失敗しました",
     "new": "新規",
     "Remember me": "ログイン情報を保存する",
     "Don't have an account? ": "アカウントをお持ちでない方はこちら  ",
@@ -126,6 +128,8 @@
     "Security Tips": "安全のために",
     "For security reasons, do not use passwords that are commonly used in everyday life. Please do not upload private files.": "日常で使用されているパスワードは使用しないでください。プライバシーファイルをアップロードしないでください。",
     "Server Limitations": "サーバの制限",
-    "Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB.": "サーバーのパフォーマンスには限界があり、最大アップロード可能なファイルサイズは2MBに設定されています。"
+    "Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB.": "サーバーのパフォーマンスには限界があり、最大アップロード可能なファイルサイズは2MBに設定されています。",
+    "Illegal location": "無効な場所",
+    "The target folder does not exist": "対象のフォルダが存在しません"
 }
  

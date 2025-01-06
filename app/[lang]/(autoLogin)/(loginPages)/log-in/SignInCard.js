@@ -11,7 +11,7 @@ import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { GoogleIcon, FacebookIcon, SitemarkIcon } from './CustomIcons';
 import { Stack } from '@mui/material';
-import Avatar from '@mui/material/Avatar';
+import Image from 'next/image';
 import Button from '@mui/material/Button';
 import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
@@ -27,7 +27,7 @@ import Snackbar from '@mui/material/Snackbar';
 import { newDesUrl } from '@/utils/urlFunctions';
 const { reqLogin } = api
 import { useTranslation } from '@/international/myTranslate';
-
+import { siteMarkUrl } from '@/config/config';
 
 const Card = styled(MuiCard)(({ theme }) => ({
   display: 'flex',
@@ -74,9 +74,9 @@ export default function SignInCard() {
     if (e.target.value === '') {
       setUsernameEmpty(true)
     }
-    else{
+    else {
       setUsernameEmpty(false)
-    } 
+    }
   }
 
   const handleOnChangePassword = (e) => {
@@ -91,15 +91,15 @@ export default function SignInCard() {
 
   const handleSubmit = async (event) => {
     let notSubmit = false
-    if(username === '' || username === null){
+    if (username === '' || username === null) {
       notSubmit = true
       setUsernameEmpty(true)
     }
-    if(password === ''){
+    if (password === '') {
       notSubmit = true
       setPasswordEmpty(true)
     }
-    if(notSubmit){
+    if (notSubmit) {
       return
     }
     let res = await reqLogin(username, password)
@@ -148,8 +148,17 @@ export default function SignInCard() {
 
   return (
     <Card variant="outlined">
-      <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
-        <SitemarkIcon />
+      <Box sx={{ display: { xs: 'flex', md: 'none' }, alignItems: 'flex-end' }}>
+        <Box>
+        <Image
+          src={siteMarkUrl}
+          height={32}
+          width={52}
+          layout="intrinsic"
+          alt=""
+        />
+        </Box>
+        <Typography fontFamily={'"Delius"'} variant="h5" sx={{ ml: '6px', mb: '3px' }}>Drive</Typography>
       </Box>
       <Typography
         component="h1"
@@ -168,7 +177,7 @@ export default function SignInCard() {
             fullWidth
             placeholder={t("Username")}
             autoFocus
-            value={username===null?'':username}
+            value={username === null ? '' : username}
             onChange={handleOnChangeUsername}
             error={usernameEmpty}
             helperText={usernameHelperText}
@@ -177,16 +186,16 @@ export default function SignInCard() {
         <Stack>
           <FormLabel htmlFor="password">{t('Password')}</FormLabel>
           <TextField
-          required
-          fullWidth
-          type="password"
-          placeholder="••••••"
-          value={password}
-          onChange={handleOnChangePassword}
-          error={passwordEmpty}
-          helperText={passwordHelperText}
-          color={loginError ? 'error' : 'primary'}
-        />
+            required
+            fullWidth
+            type="password"
+            placeholder="••••••"
+            value={password}
+            onChange={handleOnChangePassword}
+            error={passwordEmpty}
+            helperText={passwordHelperText}
+            color={loginError ? 'error' : 'primary'}
+          />
         </Stack>
         <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
@@ -215,15 +224,15 @@ export default function SignInCard() {
         </Typography>
       </Box>
       <Snackbar
-              anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-              autoHideDuration={3000}
-              open={alertOpen}
-              onClose={handleAlertClose}
-            >
-              <Alert severity={alertType} sx={{ width: '100%' }}>
-                {alertMessage}
-              </Alert>
-            </Snackbar>
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        autoHideDuration={3000}
+        open={alertOpen}
+        onClose={handleAlertClose}
+      >
+        <Alert severity={alertType} sx={{ width: '100%' }}>
+          {alertMessage}
+        </Alert>
+      </Snackbar>
     </Card>
   );
 }

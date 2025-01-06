@@ -80,6 +80,7 @@ export default function MySearchBar() {
         if (e.keyCode !== 13) {
             return
         }
+        e.target.blur();
         dispatch(setItemName(searchValue))
         dispatch(setFileTypeIndex(0))
         dispatch(setDateCreatedIndex(0))
@@ -90,7 +91,6 @@ export default function MySearchBar() {
 
     const advancedSearch = () => {
         setDialogOpen(false)
-        setSearchValue(itemName)
         dispatch(setItemName(itemName))
         dispatch(setFileTypeIndex(fileTypeIndex))
         dispatch(setDateCreatedIndex(dateCreatedIndex))
@@ -100,14 +100,11 @@ export default function MySearchBar() {
     }
 
     useEffect(()=>{
-        if(urlWithoutLanguage(pathname) !== '/search'){
-            setSearchValue('')
-            dispatch(setItemName(''))
-        }
-    }, [pathname])
+        setSearchValue(searchParameters.itemName) 
+    }, [searchParameters])
     return (
         <>
-            <Box tabindex={'1'} sx={{
+            <Box tabIndex={'1'} sx={{
                 position: 'relative',
                 borderRadius: 8,
                 backgroundColor: 'custom.searchBarBlue',

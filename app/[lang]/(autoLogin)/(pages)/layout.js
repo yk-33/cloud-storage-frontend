@@ -74,7 +74,7 @@ import { Paper } from '@mui/material';
 import LogoutIcon from '@mui/icons-material/Logout';
 import SettingsIcon from '@mui/icons-material/Settings';
 import RefreshIcon from '@mui/icons-material/Refresh';
-import { BACK_END_URL, FILE_SIZE, FILE_SIZE_BYTE } from '@/config/config';
+import { BACK_END_URL, FILE_SIZE, FILE_SIZE_BYTE, siteMarkUrl } from '@/config/config';
 import MySearchBar from '@/components/searchBar/searchBar';
 import AddToDriveTwoToneIcon from '@mui/icons-material/AddToDriveTwoTone';
 import { useTranslation } from '@/international/myTranslate';
@@ -83,6 +83,7 @@ import InputLabel from '@mui/material/InputLabel';
 import Select from '@mui/material/Select';
 import { newLanguageUrl, urlWithoutLanguage, newDesUrl } from '@/utils/urlFunctions';
 import { setAlertStatus } from '@/store/modules/alertStore';
+import Image from 'next/image';
 
 
 const pages = ['Products', 'Pricing', 'Blog'];
@@ -94,36 +95,36 @@ const LINKS = [
 
 const BootstrapInput = styled(InputBase)(({ theme }) => ({
     'label + &': {
-      marginTop: theme.spacing(3),
+        marginTop: theme.spacing(3),
     },
     '& .MuiInputBase-input': {
-      borderRadius: 4,
-      position: 'relative',
-      backgroundColor: theme.palette.background.paper,
-      border: '1px solid #ced4da',
-      fontSize: 13,
-      padding: '10px 26px 10px 12px',
-      transition: theme.transitions.create(['border-color', 'box-shadow']),
-      // Use the system font instead of the default Roboto font.
-      fontFamily: [
-        '-apple-system',
-        'BlinkMacSystemFont',
-        '"Segoe UI"',
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-        '"Apple Color Emoji"',
-        '"Segoe UI Emoji"',
-        '"Segoe UI Symbol"',
-      ].join(','),
-      '&:focus': {
         borderRadius: 4,
-        borderColor: '#80bdff',
-        boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
-      },
+        position: 'relative',
+        backgroundColor: theme.palette.background.paper,
+        border: '1px solid #ced4da',
+        fontSize: 13,
+        padding: '10px 26px 10px 12px',
+        transition: theme.transitions.create(['border-color', 'box-shadow']),
+        // Use the system font instead of the default Roboto font.
+        fontFamily: [
+            '-apple-system',
+            'BlinkMacSystemFont',
+            '"Segoe UI"',
+            'Roboto',
+            '"Helvetica Neue"',
+            'Arial',
+            'sans-serif',
+            '"Apple Color Emoji"',
+            '"Segoe UI Emoji"',
+            '"Segoe UI Symbol"',
+        ].join(','),
+        '&:focus': {
+            borderRadius: 4,
+            borderColor: '#80bdff',
+            boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+        },
     },
-  }));
+}));
 
 function ResponsiveAppBar({ children }) {
     const dispatch = useDispatch();
@@ -313,13 +314,17 @@ function ResponsiveAppBar({ children }) {
                 }
                 else if (res.data?.code === 450) {
                     thisUpLoadingFiles[index].status = 'fail'
-                    dispatch(setAlertStatus({ open: true, alertType: 'error', message: 'The parent folder does not exist' }))
+                    dispatch(setAlertStatus({ open: true, alertType: 'error', message: t('The target folder does not exist') }))
                     hasFolderNotExistError = true
                 }
                 else if (res.data?.code === 403) {
                     thisUpLoadingFiles[index].status = 'fail'
                     //+++++
-                    dispatch(setAlertStatus({ open: true, alertType: 'error', message: `File is too large, do not exceed ${FILE_SIZE}MB.` }))
+                    dispatch(setAlertStatus({
+                        open: true, alertType: 'error', message: lang === "en" ?
+                            `File is too large, do not exceed ${FILE_SIZE}MB.` :
+                            `ファイルが大きすぎます。${FILE_SIZE}MBを超えないようにしてください。`
+                    }))
                 }
                 else if (res.data?.code === 410) {
                     thisUpLoadingFiles[index].status = 'fail'
@@ -406,7 +411,7 @@ function ResponsiveAppBar({ children }) {
         processActionResponse(res, dispatch, {
             200: { message: t('Folder created successfully'), action: 1 },
             409: { message: t(`Folder naming conflict`), action: 1 },
-            450: { message: t(`The parent folder does not exist`), action: 2 }
+            450: { message: t(`The target folder does not exist`), action: 2 }
         })
         setFolderNameDialogOpen(false);
         setNewFolderName(t('Untitled folder'));
@@ -499,23 +504,21 @@ function ResponsiveAppBar({ children }) {
             >
                 <Container maxWidth="xl">
                     <Toolbar disableGutters sx={{ height: '64px', }}>
-                        <Box sx={{
-                            display: 'flex',
-                            width: '238px',
-                            pl: '20px',
-                            alignItems: 'center',
-                        }}>
-                            <AddToDriveTwoToneIcon fontSize="large" />
-                            <Typography variant='h6' sx={{ ml: '8px', mt: '4px' }}>
-                                Drive
-                            </Typography>
+                        <Box sx={{ display: 'flex', alignItems: 'flex-end', pl: '20px', }}>
+                            <Image
+                                src={siteMarkUrl}
+                                height={28}
+                                width={48}
+                                layout="intrinsic"
+                                alt=""
+                            />
+                            <Typography fontFamily={'"Delius"'} fontSize='1.25em' fontWeight='500' variant="h5" sx={{ ml: '6px' }}>Drive</Typography>
                         </Box>
-
                         <Box sx={{ display: 'flex', flexGrow: 1, justifyContent: 'center' }}>
                             <MySearchBar />
                         </Box>
 
-                        <Box sx={{ width: '238px', display: 'flex', justifyContent: 'flex-end', alignItems:'center' }}>
+                        <Box sx={{ width: '238px', display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                             <FormControl sx={{ mr: 3 }} variant="standard">
                                 <Select
                                     labelId="demo-customized-select-label"
@@ -523,10 +526,10 @@ function ResponsiveAppBar({ children }) {
                                     value={lang}
                                     onChange={switchLanguage}
                                     input={<BootstrapInput />}
-                                    sx={{width: '90px'}}
+                                    sx={{ width: '90px' }}
                                 >
-                                    <MenuItem value={"ja"} sx={{fontSize: 13}}>{t('japanese')}</MenuItem>
-                                    <MenuItem value={"en"} sx={{fontSize: 13}}>{t('english')}</MenuItem>
+                                    <MenuItem value={"ja"} sx={{ fontSize: 13 }}>{t('japanese')}</MenuItem>
+                                    <MenuItem value={"en"} sx={{ fontSize: 13 }}>{t('english')}</MenuItem>
                                 </Select>
                             </FormControl>
                             <Tooltip title={
@@ -541,7 +544,7 @@ function ResponsiveAppBar({ children }) {
                                     aria-controls="menu-appbar"
                                     aria-haspopup="true"
                                     onClick={handleOpenUserMenu}
-                                    color="inherit"
+                                    color="login"
                                 >
                                     <AccountCircle fontSize='large' />
                                 </IconButton>

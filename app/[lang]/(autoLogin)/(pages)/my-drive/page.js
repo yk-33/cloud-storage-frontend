@@ -97,7 +97,15 @@ export default function Home() {
                         try {
                             let res = await reqDownloadFolder(id)
                             if(res.status === 509){
-                                dispatch(setAlertStatus({open: true, alertType: 'error', message: t("LIMIT_EXCEEDED")}))
+                                dispatch(setAlertStatus({open: true, alertType: 'error', message: t("Too many requests, please try again later.")}))
+                                return
+                            }
+                            else if(res.status === 429){
+                                dispatch(setAlertStatus({open: true, alertType: 'error', message: t("The system is busy, please try again later.")}))
+                                return
+                            }
+                            else if(res.status === 503){
+                                dispatch(setAlertStatus({open: true, alertType: 'error', message: t("Service unavailable")}))
                                 return
                             }
                             else if(res.status === 406){
@@ -273,7 +281,7 @@ export default function Home() {
         // console.log(res)
         processActionResponse(res, dispatch, {
             200: { message: t('Move successful'), action: 2 },
-            450: { message:` ${t('Move failed')}: ${res.message}`, action: 2 },
+            450: { message:`${t('Move failed')}: ${res.message}`, action: 2 },
         })
         setFolderBrowserDialogOpen(false)
     }
@@ -287,9 +295,9 @@ export default function Home() {
             res = await reqRenameFile(renameItemId, renameItemName)
         }
         processActionResponse(res, dispatch, {
-            200: { message: t(`Renaming ${renameItemType} successful`), action: 1 },  //++++++++++++++++
-            450: { action: 2 },
-            409: { action: 1 },
+            200: { message: t(`Renaming ${renameItemType} successful`), action: 1 },  
+            450: { message:`${t(`Renaming ${renameItemType} failed`)}: ${t(res.message)}`, action: 2 },
+            409: { message:`${t(`Renaming ${renameItemType} failed`)}: ${t(res.message)}`, action: 1 },
         })
         setRenameDialogOpen(false)
     }

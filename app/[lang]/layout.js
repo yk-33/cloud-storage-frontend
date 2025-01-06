@@ -5,11 +5,11 @@ import store from "@/store";
 import { Provider } from 'react-redux';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemeProvider, createTheme } from '@mui/material';
-import { grey } from '@mui/material/colors';
+import { grey, green } from '@mui/material/colors';
 import './global.css'
 import { LocaleContext } from '@/international/myTranslate';
 
-const theme = createTheme({
+let theme = createTheme({
   palette: {
     background: {
       default: '#f7f9fc',
@@ -19,7 +19,7 @@ const theme = createTheme({
       black: '#3d3d3d',
       blue: '#c2e7ff',
       searchBarBlue: '#e9eef6',
-    }
+    },
   },
   typography: {
     h5: {
@@ -75,6 +75,18 @@ const theme = createTheme({
     }
   },
 })
+
+theme = createTheme(theme, {
+  // Custom colors created with augmentColor go here
+  palette: {
+    login: theme.palette.augmentColor({
+      color: {
+        main: green[600],
+      },
+      name: 'login',
+    }),
+  },
+});
 
 export default function RootLayout({ children, params }) {
   

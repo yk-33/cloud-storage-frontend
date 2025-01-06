@@ -4,11 +4,17 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'http',
+        protocol: 'https',
         hostname: 'api.simple-cloud-storage.click',
-        port: '80',
+        port: '443',
         pathname: '/images/**',
       },
+      // {
+      //   protocol: 'http',
+      //   hostname: 'localhost',
+      //   port: '8080',
+      //   pathname: '/images/**',
+      // },
     ],
   },
 };

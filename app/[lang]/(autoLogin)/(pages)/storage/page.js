@@ -14,7 +14,7 @@ import WhiteTooltip from "@/components/whiteTooltip/whiteTooltip";
 import { tooltipClasses } from '@mui/material/Tooltip';
 import { BorderHorizontalTwoTone } from "@mui/icons-material";
 import IconButton from '@mui/material/IconButton';
-let { reqGetFileList, reqDeleteFile, reqGetAllFileList, reqGetDeletedFiles } = api;
+let { reqGetFileList, reqDeleteFile, reqGetAllFileList, reqGetAllDeletedFiles } = api;
 import { SEARCH_TYPE, TOTAL_STORAGE_PER_USER_BYTE } from "@/config/config";
 import { filesize } from "filesize";
 import Divider from '@mui/material/Divider';
@@ -203,7 +203,8 @@ export default function StoragePage() {
 
 
     const getData = async () => {
-        let [res, trashRes] = await Promise.all([reqGetAllFileList(), reqGetDeletedFiles(true)])
+        let [res, trashRes] = await Promise.all([reqGetAllFileList(), reqGetAllDeletedFiles()])
+        console.log(trashRes)
         processResponse(res, dispatch)
         processResponse(trashRes, dispatch)
         if (res.data !== null && trashRes.data !== null) {
@@ -218,19 +219,18 @@ export default function StoragePage() {
                 if (SEARCH_TYPE['Photos & images'].includes(fileType)) {
                     newStorageValue["Picture"] += item.fileSize
                 }
-                else if (SEARCH_TYPE['PDFs'].includes(fileType) || SEARCH_TYPE['Documents'].includes(fileType) ||
-                    SEARCH_TYPE['Archives'].includes(fileType)) {
-                    newStorageValue["Document"] += item.fileSize
-                }
                 else if (SEARCH_TYPE['Audio'].includes(fileType)) {
                     newStorageValue["Audio"] += item.fileSize
                 }
                 else if (SEARCH_TYPE['Videos'].includes(fileType)) {
                     newStorageValue["Video"] += item.fileSize
                 }
+                else{
+                    newStorageValue["Document"] += item.fileSize
+                }
             })
             let trashValue = 0
-            trashRes.data.deletedFiles.forEach(item=>{
+            trashRes.data.fileList.forEach(item=>{
                 trashValue += item.fileSize
             })
             newStorageValue["Trash"] = trashValue

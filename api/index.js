@@ -29,6 +29,7 @@ export default {
     reqGetFileList: (folderId, asc)=>_fetch(`/files`, 'GET', {folderId, asc}, {}),
     reqGetAllFileList: ()=>_fetch(`/all-files`),
     reqGetDeletedFiles: (asc)=>_fetch('/deleted-files', 'GET', {asc}),
+    reqGetAllDeletedFiles: ()=>_fetch(`/all-deleted-files`),
     reqRenameFile: (fileId, newName)=>_fetch(`/rename-file/${fileId}`, 'PATCH', {newName}),
 
     reqDownloadFile: (fileId)=>fetch( `${BACK_END_URL}/files/${fileId}`, {credentials: 'include'}),

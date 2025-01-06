@@ -117,6 +117,8 @@
   "No files are using storage": "No files are using storage",
   "Renaming folder successful": "Renaming folder successful",
     "Renaming file successful": "Renaming file successful",
+    "Renaming folder failed": "Renaming folder failed",
+    "Renaming file failed": "Renaming file failed",
     "new": "new",
     "Remember me": "Remember me",
     "Don't have an account? ": "Don't have an account? ",
@@ -126,5 +128,7 @@
     "Security Tips": "Security Tips",
     "For security reasons, do not use passwords that are commonly used in everyday life. Please do not upload private files.": "For security reasons, do not use passwords that are commonly used in everyday life. Please do not upload private files.",
     "Server Limitations": "Server Limitations",
-    "Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB.": "Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB."
+    "Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB.": "Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB.",
+    "Illegal location": "Illegal location",
+    "The target folder does not exist": "The target folder does not exist"
 }

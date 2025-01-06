@@ -19,7 +19,8 @@ import Typography from '@mui/material/Typography';
 import { useTranslation } from '@/international/myTranslate';
 import { Select } from 'antd';
 import { newLanguageUrl, urlWithoutLanguage, newDesUrl } from '@/utils/urlFunctions';
-
+import { siteMarkUrl } from '@/config/config';
+import Image from 'next/image';
 const { reqRegisterUser, reqCheckUsernameUnique } = api
 
 
@@ -238,9 +239,20 @@ export default function SignUp(props) {
               ]}
             />
           </Box>
-          <Box sx={{ display:'flex', justifyContent:'center', flexGrow: 1 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', flexGrow: 1 }}>
             <Card variant="outlined">
-              <SitemarkIcon />
+              <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+                <Box >
+                  <Image
+                  src={siteMarkUrl}
+                  height={32}
+                  width={52}
+                  layout="intrinsic"
+                  alt=""
+                />
+                </Box>
+                <Typography fontFamily={'"Delius"'} variant="h5" sx={{ ml: '6px', mb: '3px' }}>Drive</Typography>
+              </Box>
               <Typography
                 component="h1"
                 variant="h4"

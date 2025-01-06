@@ -2,19 +2,11 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-
-import AutoFixHighRoundedIcon from '@mui/icons-material/AutoFixHighRounded';
-import ConstructionRoundedIcon from '@mui/icons-material/ConstructionRounded';
-import SettingsSuggestRoundedIcon from '@mui/icons-material/SettingsSuggestRounded';
-import ThumbUpAltRoundedIcon from '@mui/icons-material/ThumbUpAltRounded';
-import PrivacyTipIcon from '@mui/icons-material/PrivacyTip';
-import GppMaybeOutlinedIcon from '@mui/icons-material/GppMaybeOutlined';
-import PrivacyTipRoundedIcon from '@mui/icons-material/PrivacyTipRounded';
-import BackupRoundedIcon from '@mui/icons-material/BackupRounded';
+import Image from 'next/image';
 import GppMaybeRoundedIcon from '@mui/icons-material/GppMaybeRounded';
 import MiscellaneousServicesRoundedIcon from '@mui/icons-material/MiscellaneousServicesRounded';
 import { useTranslation } from '@/international/myTranslate';
-import { SitemarkIcon } from './CustomIcons';
+import { siteMarkUrl } from '@/config/config';
 
 const items = [
   {
@@ -37,8 +29,17 @@ export default function Content() {
     <Stack
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
     >
-      <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
-        <SitemarkIcon />
+      <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'flex-end' }}>
+        <Box>
+          <Image
+          src={siteMarkUrl}
+          height={32}
+          width={52}
+          layout="intrinsic"
+          alt=""
+        />
+        </Box>
+        <Typography fontFamily={'"Delius"'} variant="h5" sx={{ml: '6px', mb: '4px'}}>Drive</Typography>
       </Box>
       {items.map((item, index) => (
         <Stack key={index} direction="row" sx={{ gap: 2 }}>

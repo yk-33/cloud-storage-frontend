@@ -1,4 +1,4 @@
-const BACK_END_URL = 'api.simple-cloud-storage.click:80' //'http://localhost:8080'//'http://192.168.31.131:8080'
+const BACK_END_URL = 'https://api.simple-cloud-storage.click:443' //'http://localhost:8080'//'http://192.168.31.131:8080'
 const PICTURE_TYPE = new Set(['jpeg', 'jpg', 'png', 'gif', 'svg'])  //card中哪些类型请求预览图
 const FILE_SIZE = 5  //单位：MB
 const FILE_SIZE_BYTE = FILE_SIZE * 1024 * 1024
@@ -44,5 +44,7 @@ const emptyPageImageUrl = {
     card: `${BACK_END_URL}/images/empty_state_details_v2.svg`,
 }
 
+const siteMarkUrl = `${BACK_END_URL}/images/site_mark.png`
+
 export {BACK_END_URL, FILE_SIZE, FILE_SIZE_BYTE, PICTURE_TYPE, SEARCH_TYPE
-    , searchFileType, searchDateCreated, TOTAL_STORAGE_PER_USER_BYTE, emptyPageImageUrl}
+    , searchFileType, searchDateCreated, TOTAL_STORAGE_PER_USER_BYTE, emptyPageImageUrl, siteMarkUrl}
