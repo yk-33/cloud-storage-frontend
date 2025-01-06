@@ -25,6 +25,7 @@ const items = [
 
 export default function Content() {
   const { t, lang } = useTranslation()
+  console.log(siteMarkUrl)
   return (
     <Stack
       sx={{ flexDirection: 'column', alignSelf: 'center', gap: 4, maxWidth: 450 }}
