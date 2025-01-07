@@ -128,7 +128,7 @@
     "Security Tips": "安全のために",
     "For security reasons, do not use passwords that are commonly used in everyday life. Please do not upload private files.": "日常で使用されているパスワードは使用しないでください。プライバシーファイルをアップロードしないでください。",
     "Server Limitations": "サーバの制限",
-    "Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB.": "サーバーのパフォーマンスには限界があり、最大アップロード可能なファイルサイズは2MBに設定されています。",
+    "Server Limitations message": "サーバーのパフォーマンスには限界があり、最大アップロード可能なファイルサイズは{size}MBに設定されています。",
     "Illegal location": "無効な場所",
     "The target folder does not exist": "対象のフォルダが存在しません"
 }

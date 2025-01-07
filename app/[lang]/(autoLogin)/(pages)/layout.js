@@ -498,12 +498,12 @@ function ResponsiveAppBar({ children }) {
     return (
         <>
             <AppBar sx={{
-                height: '64px', position: "fixed", top: "0", bgcolor: 'background.default', color: 'text.secondary',
-                boxShadow: 0,
+                height: '64px', pt:'20px', position: "fixed", top: "0", bgcolor: 'background.default', color: 'text.secondary',
+                boxShadow: 0, '& .MuiContainer-root':{maxWidth: '100%'}
             }}
             >
-                <Container maxWidth="xl">
-                    <Toolbar disableGutters sx={{ height: '64px', }}>
+                <Container  sx={{ px: '16px'}}>
+                    <Toolbar disableGutters sx={{ height: '64px', pr:'8px'}}>
                         <Box sx={{ display: 'flex', alignItems: 'flex-end', pl: '20px', }}>
                             <Image
                                 src={siteMarkUrl}
@@ -582,13 +582,15 @@ function ResponsiveAppBar({ children }) {
                 sx={{
                     width: 240,
                     flexShrink: 0,
+                    pt:'20px',
                     '& .MuiDrawer-paper': {
                         width: 240,
                         boxSizing: 'border-box',
-                        top: '64px',
+                        top: '84px',
                         height: 'auto',
                         bottom: 0,
                         padding: "8px",
+                        pt: '30px',
                         bgcolor: 'background.default',
                         color: 'text.secondary',
                         border: 0,
@@ -659,7 +661,7 @@ function ResponsiveAppBar({ children }) {
                     bgcolor: 'backgroud.default',
                     ml: '240px',
                     mt: '64px',
-                    height: `calc(100vh - 64px)`,
+                    height: `calc(100vh - 84px)`,
                     p: 3,
                 }}
             >

@@ -16,5 +16,16 @@ export const useTranslation = () => {
     },
     [currentLocale]
   );
-  return { t: translate, lang:  currentLocale};
+
+  const templateTranslate = useCallback(
+    (key, params) => {
+      let template = RESOURCES[currentLocale][key];
+      Object.keys(params).forEach((param) => {
+        template = template.replace(`{${param}}`, params[param]);
+      });
+      return template
+    },
+    [currentLocale]
+  )
+  return { t: translate, tp: templateTranslate, lang:  currentLocale};
 };

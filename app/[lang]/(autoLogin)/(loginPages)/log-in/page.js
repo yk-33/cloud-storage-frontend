@@ -10,7 +10,7 @@ import { useTranslation } from '@/international/myTranslate';
 import { Box } from '@mui/material';
 import { Select } from 'antd';
 
-export default function SignInSide() {
+export default function SignInSide(props) {
   const router = useRouter()
   const pathnameWithLang = usePathname()
   const pathname = urlWithoutLanguage(pathnameWithLang)
@@ -21,14 +21,14 @@ export default function SignInSide() {
     router.push(newPathname)
   };
   return (
-    <AppTheme >
+    <AppTheme {...props}>
       <Stack
         direction="column"
         component="main"
         sx={[
           {
             justifyContent: 'center',
-            height: 'calc((1 - var(--template-frame-height, 0)) * 100%)',
+            height: 'calc((1 - var(--template-frame-height, 0)) * 100dvh)',
             minHeight: '100%',
           },
           (theme) => ({
@@ -53,12 +53,15 @@ export default function SignInSide() {
           direction={{ xs: 'column', md: 'row-reverse' }}
           sx={{
             justifyContent: 'center',
+            minHeight: '100%',
             gap: { xs: 6, sm: 0 },
             p: 2,
             mx: 2,
           }}
         >
-          <Box sx={{ position: 'relative', height: '64px', minWidth:'120px' }}>
+          <Box sx={{ position: 'relative', height: '64px', minWidth:'120px',
+            pt: {sm: '5px', md: '5px', lg: '10px'}
+           }}>
             <Select
               value={lang}
               style={{

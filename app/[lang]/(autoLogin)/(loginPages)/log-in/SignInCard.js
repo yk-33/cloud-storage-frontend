@@ -89,6 +89,13 @@ export default function SignInCard() {
     }
   }
 
+  const handleKeyDown = (e) => {
+    if(e.key !== "Enter"){
+      return
+    }
+    handleSubmit(e)
+  }
+
   const handleSubmit = async (event) => {
     let notSubmit = false
     if (username === '' || username === null) {
@@ -116,7 +123,7 @@ export default function SignInCard() {
       handleAlertOpen(t('The system is busy, please try again later.'), 'error')
     }
     else if (res.code === 503) {
-      handleAlertOpen(t('Network failure'), 'info')
+      handleAlertOpen(t('Network failure'), 'error')
     }
     else {
       handleAlertOpen(t('Incorrect username or password'), 'error')
@@ -181,6 +188,7 @@ export default function SignInCard() {
             onChange={handleOnChangeUsername}
             error={usernameEmpty}
             helperText={usernameHelperText}
+            onKeyDown={handleKeyDown}
           />
         </Stack>
         <Stack>
@@ -195,6 +203,7 @@ export default function SignInCard() {
             error={passwordEmpty}
             helperText={passwordHelperText}
             color={loginError ? 'error' : 'primary'}
+            onKeyDown={handleKeyDown}
           />
         </Stack>
         <FormControlLabel

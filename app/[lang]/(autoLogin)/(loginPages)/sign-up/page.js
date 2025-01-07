@@ -149,6 +149,13 @@ export default function SignUp(props) {
     }
   }
 
+  const handleKeyDown = (e) => {
+    if(e.key !== "Enter"){
+      return
+    }
+    handleSubmit(e)
+  }
+
   const handleSubmit = async (event) => {
     let notSubmit = false
     if (username === '') {
@@ -218,7 +225,9 @@ export default function SignUp(props) {
             mx: 2,
           }}
         >
-          <Box sx={{ position: 'relative', height: '64px' }}>
+          <Box sx={{ position: 'relative', height: '64px',
+            pt: {sm: '5px', md: '5px', lg: '10px'}
+           }}>
             <Select
               value={lang}
               style={{
@@ -274,6 +283,7 @@ export default function SignUp(props) {
                     onChange={handleOnChangeUsername}
                     error={usernameExists || usernameEmpty}
                     helperText={usernameHelperText}
+                    onKeyDown={handleKeyDown}
                   />
                 </Stack>
                 <Stack>
@@ -288,6 +298,7 @@ export default function SignUp(props) {
                     onChange={handleOnChangePassword}
                     error={passwordEmpty}
                     helperText={passwordHelperText}
+                    onKeyDown={handleKeyDown}
                   />
                 </Stack>
                 <Button

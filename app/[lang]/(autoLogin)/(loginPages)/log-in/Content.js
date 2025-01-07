@@ -6,7 +6,7 @@ import Image from 'next/image';
 import GppMaybeRoundedIcon from '@mui/icons-material/GppMaybeRounded';
 import MiscellaneousServicesRoundedIcon from '@mui/icons-material/MiscellaneousServicesRounded';
 import { useTranslation } from '@/international/myTranslate';
-import { siteMarkUrl } from '@/config/config';
+import { siteMarkUrl, FILE_SIZE } from '@/config/config';
 
 const items = [
   {
@@ -19,12 +19,12 @@ const items = [
     icon: <MiscellaneousServicesRoundedIcon sx={{ color: 'text.secondary' }} />,
     title: 'Server Limitations',
     description:
-      'Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB.',
+      'Server Limitations message',
   },
 ];
 
 export default function Content() {
-  const { t, lang } = useTranslation()
+  const { t, tp, lang } = useTranslation()
   console.log(siteMarkUrl)
   return (
     <Stack
@@ -50,7 +50,11 @@ export default function Content() {
               {t(item.title)}
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              {t(item.description)}
+              {
+                item.title === 'Server Limitations'?
+                tp(item.description, {size: FILE_SIZE}):
+                t(item.description)
+              }
             </Typography>
           </div>
         </Stack>

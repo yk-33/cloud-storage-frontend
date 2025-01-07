@@ -128,7 +128,7 @@
     "Security Tips": "Security Tips",
     "For security reasons, do not use passwords that are commonly used in everyday life. Please do not upload private files.": "For security reasons, do not use passwords that are commonly used in everyday life. Please do not upload private files.",
     "Server Limitations": "Server Limitations",
-    "Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB.": "Server performance has its limits, and the maximum file size that can be uploaded is set to 2MB.",
+    "Server Limitations message": "Server performance has its limits, and the maximum file size that can be uploaded is set to {size}MB.",
     "Illegal location": "Illegal location",
     "The target folder does not exist": "The target folder does not exist"
 }
