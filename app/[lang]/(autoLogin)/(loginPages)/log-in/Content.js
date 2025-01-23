@@ -33,14 +33,14 @@ export default function Content() {
       <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'flex-end' }}>
         <Box>
           <Image
-          src={siteMarkUrl}
-          height={32}
-          width={52}
-          layout="intrinsic"
-          alt=""
-        />
+            src={siteMarkUrl}
+            height={32}
+            width={52}
+            layout="intrinsic"
+            alt=""
+          />
         </Box>
-        <Typography fontFamily={'"Delius"'} variant="h5" sx={{ml: '6px', mb: '4px'}}>Drive</Typography>
+        <Typography fontFamily={'"Delius"'} variant="h5" sx={{ ml: '6px', mb: '4px' }}>Drive</Typography>
       </Box>
       {items.map((item, index) => (
         <Stack key={index} direction="row" sx={{ gap: 2 }}>
@@ -51,14 +51,35 @@ export default function Content() {
             </Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
               {
-                item.title === 'Server Limitations'?
-                tp(item.description, {size: FILE_SIZE}):
-                t(item.description)
+                item.title === 'Server Limitations' ?
+                  tp(item.description, { size: FILE_SIZE }) :
+                  t(item.description)
               }
             </Typography>
           </div>
         </Stack>
       ))}
+      <Stack direction={'row'} gap={'15px'} sx={{ pt: '40px', pl: '30px', "& img": { height: '35px' } }} >
+        <a href="https://spring.io/projects/spring-boot">
+          <img src="https://skillicons.dev/icons?i=spring&theme=light" />
+        </a>
+        <a href="https://www.mysql.com/">
+          <img src="https://skillicons.dev/icons?i=mysql&theme=light" />
+        </a>
+        <a href="https://nextjs.org/">
+          <img src="https://skillicons.dev/icons?i=nextjs&theme=light" />
+        </a>
+        <a href="https://mui.com/">
+          <img src="https://skillicons.dev/icons?i=materialui&theme=light" />
+        </a>
+        <a href="https://aws.amazon.com/">
+          <img src="https://skillicons.dev/icons?i=aws" />
+        </a>
+        <a href=" https://www.docker.com/">
+          <img src="https://skillicons.dev/icons?i=docker&theme=light" />
+        </a>
+
+      </Stack>
     </Stack>
   );
 }
